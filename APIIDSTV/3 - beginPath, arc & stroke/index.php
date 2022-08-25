@@ -29,7 +29,7 @@
             ctx.fill();
 
             ctx.beginPath();
-            ctx.arc(350, 200, 50, 0, 2*Math.PI);
+            ctx.arc(500, 200, 50, 0, 2*Math.PI);
             ctx.fillStyle = "red";
             ctx.fill();
 

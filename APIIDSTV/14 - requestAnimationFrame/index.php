@@ -21,11 +21,34 @@
         var direction = 'left';
         var score = 0;
 
+        var pause = false;
+        var obstaculos = Array();
+        var speed = 5;
+
+
         function start () {
             cv = document.getElementById("mycanvas");
             ctx = cv.getContext('2d');
             player1 = new Cuadrado(super_x, super_y, 40, 40, "red");
             player2 = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "red");
+
+            obstaculos = [
+                obstaculo1 = new Obstaculo(100, 100, 40, 40),
+                obstaculo2 = new Obstaculo(140, 100, 40, 40),
+                obstaculo3 = new Obstaculo(180, 100, 40, 40),
+                obstaculo4 = new Obstaculo(220, 100, 40, 40),
+                obstaculo5 = new Obstaculo(260, 100, 40, 40),
+                obstaculo6 = new Obstaculo(300, 100, 40, 40),
+                obstaculo7 = new Obstaculo(340, 100, 40, 40),
+                obstaculo8 = new Obstaculo(100, 220, 40, 40),
+                obstaculo9 = new Obstaculo(100, 260, 40, 40),
+                obstaculo10 = new Obstaculo(100, 300, 40, 40),
+                obstaculo11 = new Obstaculo(340, 220, 40, 40),
+                obstaculo12 = new Obstaculo(340, 260, 40, 40),
+                obstaculo13 = new Obstaculo(340, 300, 40, 40),
+
+            ];
+
             paint();
         }
 
@@ -33,20 +56,31 @@
 
             window.requestAnimationFrame(paint);
 
-            ctx.fillStyle = "white";
+            ctx.fillStyle = "gray";
             ctx.fillRect(0, 0, 500, 500);
-
-            ctx.fillText('SCORE:' + score, 30, 30);
             
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, 500, 500);
-
+            ctx.fillStyle = "white";
+            ctx.font = "25px Arial";
+            ctx.fillText('SCORE: ' + score, 10, 30); 
             
             player1.c = random_rgba();
             player1.dibujar(ctx);
             player2.dibujar(ctx);
 
-            update();
+            obstaculos.forEach(o => {
+                o.dibujar(ctx);
+            });
+
+            if (!pause) {
+                update();
+            } else {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+                ctx.fillRect(0, 0, 500, 500); 
+
+                ctx.fillStyle = "white";
+                ctx.font = "25px Arial"; 
+                ctx.fillText('P A U S E', 200, 250);
+            }
 
         }
 
@@ -67,6 +101,20 @@
                 }  
             };
 
+            this.colision = function (obstaculos) {
+                for (const obstaculo of obstaculos) {
+                    if(this.x < obstaculo.pos_x + obstaculo.width &&
+                        this.x + this.w > obstaculo.pos_x && 
+                        this.y < obstaculo.pos_y + obstaculo.height && 
+                        this.y + this.h > obstaculo.pos_y) {
+                        return true;
+                    }
+    
+                    return false;
+                    
+                } 
+            }
+
             this.dibujar = function(ctx) {
                 ctx.fillStyle = this.c;
                 ctx.fillRect(this.x, this.y, this.w, this.h);
@@ -75,10 +123,27 @@
 
         }
 
+        class Obstaculo {
+            constructor(pos_x, pos_y, width, height) {
+                this.pos_x = pos_x;
+                this.pos_y = pos_y;
+                this.width = width;
+                this.height = height;
+                this.color = "green"
+            }
+
+            dibujar(ctx) {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.pos_x, this.pos_y, this.width, this.height);
+                ctx.strokeRect(this.pos_x, this.pos_y, this.width, this.height);
+            }
+
+        }
+
         function update() {
 
             if (direction == 'right') {
-                player1.x += 10; 
+                player1.x += speed; 
                 if (player1.x > 500) {
                     player1.x = 0;
                 }
@@ -86,7 +151,7 @@
             } 
 
             if (direction == 'left') {
-                player1.x -= 10; 
+                player1.x -= speed; 
                 if (player1.x < 0) {
                     player1.x = 500;
                 }
@@ -94,7 +159,7 @@
             }
 
             if (direction == 'down') {
-                player1.y += 10; 
+                player1.y += speed; 
                 if (player1.y > 500) {
                     player1.y = 0;
                 }
@@ -102,7 +167,7 @@
             }
 
             if (direction == 'up') {
-                player1.y -= 10; 
+                player1.y -= speed; 
                 if (player1.y < 0) {
                     player1.y = 500;
                 }
@@ -117,11 +182,13 @@
 
             }
 
+            if (player1.colision(obstaculos)) {
+                speed = 0;
+            }
 
         }
 
         document.addEventListener('keydown', (e) => {
-            console.log(e);
 
             // Arriba
             if (e.keyCode == 87 || e.keyCode == 38) {
@@ -142,11 +209,21 @@
             if (e.keyCode == 68 || e.keyCode == 39) {
                 direction = 'right';
             }
+
+            // Pausa
+            if (e.keyCode == 32) {
+                pause = (pause) ? false : true;
+            }
             
         });
 
         function generateRandomInteger(max) {
             return Math.floor(Math.random() * max) + 1;
+        }
+
+        function random_rgba() {
+            var o = Math.round, r = Math.random, s = 255;
+            return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
         }
 
         window.addEventListener('load', start);
@@ -159,17 +236,7 @@
             function (callback) {
                 window.setTimeout(callback, 17);
             };
-
         }());
-
-        document.addEventListener('keydown', (e) => {
-
-        });
-
-        function random_rgba() {
-            var o = Math.round, r = Math.random, s = 255;
-            return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
-        }
         
     </script>
 </body>
