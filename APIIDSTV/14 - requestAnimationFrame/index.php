@@ -31,7 +31,7 @@
             ctx = cv.getContext('2d');
             player1 = new Cuadrado(super_x, super_y, 40, 40, "red");
             player2 = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "red");
-
+/* 
             obstaculos = [
                 obstaculo1 = new Obstaculo(100, 100, 40, 40),
                 obstaculo2 = new Obstaculo(140, 100, 40, 40),
@@ -46,8 +46,11 @@
                 obstaculo11 = new Obstaculo(340, 220, 40, 40),
                 obstaculo12 = new Obstaculo(340, 260, 40, 40),
                 obstaculo13 = new Obstaculo(340, 300, 40, 40),
+            ]; */
 
-            ];
+            obstaculo1 = new Obstaculo(100, 100, 340, 40);
+            obstaculo2 = new Obstaculo(100, 180, 40, 260);
+            obstaculo3 = new Obstaculo(400, 180, 40, 260);
 
             paint();
         }
@@ -67,9 +70,13 @@
             player1.dibujar(ctx);
             player2.dibujar(ctx);
 
-            obstaculos.forEach(o => {
+            obstaculo1.dibujar(ctx);
+            obstaculo2.dibujar(ctx);
+            obstaculo3.dibujar(ctx);
+
+/*             obstaculos.forEach(o => {
                 o.dibujar(ctx);
-            });
+            }); */
 
             if (!pause) {
                 update();
@@ -97,11 +104,11 @@
                 this.x + this.w > target.x && 
                 this.y < target.y + target.h && 
                 this.y + this.h > target.y) {
-                    return true;  
+                    return true;
                 }  
             };
 
-            this.colision = function (obstaculos) {
+/*             this.colision = function (obstaculos) {
                 for (const obstaculo of obstaculos) {
                     if(this.x < obstaculo.pos_x + obstaculo.width &&
                         this.x + this.w > obstaculo.pos_x && 
@@ -112,6 +119,15 @@
     
                     return false;
                     
+                } 
+            } */
+
+            this.colision = function (obstaculo) {
+                if(this.x < obstaculo.pos_x + obstaculo.width &&
+                    this.x + this.w > obstaculo.pos_x && 
+                    this.y < obstaculo.pos_y + obstaculo.height && 
+                    this.y + this.h > obstaculo.pos_y) {
+                    return true;
                 } 
             }
 
@@ -179,12 +195,21 @@
                 player2.y = generateRandomInteger(500);
 
                 score += 10;
-
+                
             }
-
-            if (player1.colision(obstaculos)) {
+            
+            if (player1.colision(obstaculo1)) {
+                speed = 0;
+            } else if (player1.colision(obstaculo2)) {
+                speed = 0;
+            } else if (player1.colision(obstaculo3)) {
                 speed = 0;
             }
+
+/* 
+            if (player1.colision(obstaculos)) {
+                speed = 0;
+            } */
 
         }
 
