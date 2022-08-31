@@ -109,6 +109,7 @@
             this.w = w;
             this.h = h;
             this.c = c;
+
             this.se_tocan = function (target) { 
                 if(this.x < target.x + target.w &&
                 this.x + this.w > target.x && 
@@ -117,6 +118,7 @@
                     return true;
                 }  
             };
+
 /*             this.colision = function (obstaculos) {
                 for (const obstaculo of obstaculos) {
                     if(this.x < obstaculo.pos_x + obstaculo.width &&
@@ -130,6 +132,7 @@
                     
                 } 
             } */
+
             this.colision = function (obstaculo) {
                 if(this.x < obstaculo.pos_x + obstaculo.width &&
                     this.x + this.w > obstaculo.pos_x && 
@@ -159,30 +162,6 @@
             }
         }
         function update() {
-            if (direction == 'right') {
-                player1.x += speed; 
-                if (player1.x > 500) {
-                    player1.x = 0;
-                }
-            } 
-            if (direction == 'left') {
-                player1.x -= speed; 
-                if (player1.x < 0) {
-                    player1.x = 500;
-                }
-            }
-            if (direction == 'down') {
-                player1.y += speed; 
-                if (player1.y > 500) {
-                    player1.y = 0;
-                }
-            }
-            if (direction == 'up') {
-                player1.y -= speed; 
-                if (player1.y < 0) {
-                    player1.y = 500;
-                }
-            }
             if (player1.se_tocan(player2)) {
                 player2.x = generateRandomInteger(500);
                 player2.y = generateRandomInteger(500);
@@ -192,13 +171,30 @@
                 
             }
             
-            if (player1.colision(obstaculo1)) {
-                speed = 0;
-            } else if (player1.colision(obstaculo2)) {
+            if (player1.colision(obstaculo1) || player2.colision(obstaculo2) || player3.colision(obstaculo3)) {
+                
+                if (direction == 'right') {
+                    player1.x -= speed; 
+                } 
+                if (direction == 'left') {
+                    player1.x += speed; 
+                }
+                if (direction == 'down') {
+                    player1.y -= speed; 
+                }
+                if (direction == 'up') {
+                    player1.y += speed; 
+                }
+
+            }
+            
+            
+            
+            /*  else if (player1.colision(obstaculo2)) {
                 speed = 0;
             } else if (player1.colision(obstaculo3)) {
                 speed = 0;
-            }
+            } */
 /* 
             if (player1.colision(obstaculos)) {
                 speed = 0;
