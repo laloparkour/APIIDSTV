@@ -14,6 +14,34 @@
 
     <div id="contenedor">
 
+        <h1>Pro del salón</h1>
+
+        <ol>
+            <li v-for="alumno in palomilla">
+                {{ alumno.name }}
+                {{ alumno.role }}
+            </li>
+        </ol>
+
+        <fieldset>
+            <legend>Nuevo alumno</legend>
+            
+            <input type="text" v-model="a_name">
+            <input type="text" v-model="role">
+
+            <button @click="addPalomilla">
+                Agregar
+            </button>
+
+        </fieldset>
+
+        <fieldset>
+            <label for="">Ingresa su edad</label>
+            <input type="text" v-model="age">
+
+            <h1 v-if="age >= 18">Pasele a pistear</h1>
+            <h1 V-else>Fuga pa la casa</h1>
+        </fieldset>
 
 
         <h1>
@@ -61,6 +89,16 @@
                     n_uno: 0,
                     n_dos: 0,
                     resultado: 0,
+                    age: 0,
+                    palomilla: [
+                        {name: 'Suzzet', role: 'backend'},
+                        {name: 'Emmanuel', role: 'frontend'},
+                        {name: 'Isaco', role: 'bda'},
+                        {name: 'Adrian', role: 'hacker'},
+                        {name: 'Dara', role: 'Movil'},
+                    ],
+                    a_name: "",
+                    role: "",
                 }
             },
             methods: {
@@ -68,7 +106,10 @@
                     alert("Hola: " + this.name + " " + this.lastName)
                 },
                 sumar() {
-                    this.resultado = this.n_uno + this.n_dos
+                    resultado = this.n_uno + this.n_dos
+                },
+                addPalomilla() {
+                    this.palomilla.push({name:this.a_name, role:this.role});
                 }
             },
         }).mount('#contenedor');
