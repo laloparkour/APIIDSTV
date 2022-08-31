@@ -7,28 +7,32 @@
     <title>Document</title>
 </head>
 <body>
-    <canvas id="mycanvas" width="800" height="520">
+    <canvas id="mycanvas" width="1320" height="800">
         Tu navegador no soporta canvas
     </canvas>
     <script text="text/javascript">
         var cv = null;
         var ctx = null;
-        var player1 = null;
-        var player2 = null;
+        var player = null;
+        var enemy = null;
+
         var pared = null;
-        var paredes = new Array()
-        var techos = new Array();
+
+        var roofs = new Array();
+        var walls = new Array()
+        var floors = new Array();
 
         var super_x = 240, super_y = 240;
         
         var direction = 'right';
         var score = 0;
-        var speed = 5;
+        var speed = 0;
 
-        var bee = new Image();
-        var flor = new Image();
-        var wall = new Image();
-        var techo = new Image();
+        var knight = new Image();
+        var minotauro = new Image();
+        var walli = new Image();
+        var roofi = new Image();
+        var floori = new Image();
 
         var sonido1 = new Audio();
 
@@ -39,48 +43,121 @@
             ctx = cv.getContext('2d');
             ctx.strokeStyle = "rgba(1, 1, 1, 0)";
 
-            player1 = new Cuadrado(super_x, super_y, 40, 40, "red"); 
+            player = new Cuadrado(super_x, super_y, 40, 40, "white"); 
 
-            player2 = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "red");
+            enemy = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "white");
 
             
-            for (let i = 0; i < 799; i+=40) {
-                for (let j = 0; j < 520; j+=40) {
-                    if (i < 799 && j == 0) {
-                        paredes.push(new Cuadrado(i, j, 40, 40, "green"));
+            // Roof
+            for (let i = 0; i < 1319; i+=40) {
+                for (let j = 0; j < 799; j+=40) {
+                    if (i < 1319 && j == 0) {
+                        roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
                     
-                    if (i == 0 && j >= 40 && j < 499) {
-                        paredes.push(new Cuadrado(i, j, 40, 40, "green"));
+                    if (i == 0 && j >= 40 && j < 799) {
+                        roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
                      
-                    if (i == 760 && j >= 40 && j < 499) { 
-                        paredes.push(new Cuadrado(i, j, 40, 40, "green"));
+                    if (i == 1280 && j >= 40 && j < 799) { 
+                        roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
 
-                    if (i < 799 && j == 480) {
-                        paredes.push(new Cuadrado(i, j, 40, 40, "green"));
+                    if (j == 120) {
+
+                        if (i == 120 
+                            || i >= 200 && i <= 360 
+                            || i >= 440 && i <= 560 
+                            || i >= 640 && i <= 760 
+                            || i >= 840 && i <= 960
+                            || i >= 1040 && i <= 1280) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+                    
+                    if (j == 160) {
+                        if (i == 120 || i == 200 
+                            || i == 360 || i == 440 
+                            || i == 560 || i == 640
+                            || i == 760 || i == 840
+                            || i == 960 || i == 1160) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 200) {
+                        if (i >= 40 && i < 160 
+                            || i == 200 || i >= 360 && i < 480 
+                            || i >= 560 && i < 680
+                            || i >= 760 && i < 880
+                            || i == 960 || i == 1160) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (i < 1319 && j == 760) {
+                        roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
                 }
             };
             
-            for (let i = 0; i < 799; i+=40) {
-                for (let j = 0; j < 520; j+=40) {
+            // Walls
+            for (let i = 0; i < 1319; i+=40) {
+                for (let j = 0; j < 799; j+=40) {
 
-                    if (i >= 40 && i < 760 && j == 40) { 
-                        techos.push(new Cuadrado(i, j, 40, 40, "green"));
+                    if (i >= 40 && i < 1280 && j == 40) { 
+                        walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                    }
+
+                    if (j == 160) {
+                        if (i >= 240 && i < 340
+                            || i >= 480 && i < 560
+                            || i >= 680 && i < 760
+                            || i >= 880 && i < 960
+                            || i >= 1000 && i < 1160
+                            || i > 1160 && i < 1280) { 
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+                }
+            };
+            
+            // Floor
+            for (let i = 0; i < 1319; i+=40) {
+                for (let j = 0; j < 799; j+=40) {
+
+                    if (i >= 40 && i < 1280 && j == 80) { 
+                        floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                    }
+                    
+                    if (j == 120) {
+                        if (i >= 40 && i < 120 
+                            || i == 160 || i == 400
+                            || i == 600 || i == 800
+                            || i == 1000) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+                    
+                    if (j == 160) {
+                        if (i >= 40 && i < 120 
+                            || i == 160 || i == 400
+                            || i == 600 || i == 800
+                            || i == 1000) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
                     }
                 }
             };
 
 
+            pared = new Cuadrado(20, 80, 30, 300, "red");
 
-            pared = new Cuadrado(40, 80, 30, 300, "red");
-
-            bee.src = 'cf.png';
-            flor.src = 'mf.png';
-            wall.src = 'wall.png';
-            techo.src = 'techo.png';
+            knight.src = 'cf.png';
+            minotauro.src = 'mf.png';
+            walli.src = 'wall.png';
+            roofi.src = 'roof.png';
+            floori.src = 'floor.png';
 
             sonido1.src = "no.mp3"
 
@@ -91,33 +168,37 @@
             window.requestAnimationFrame(paint);
             
             ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, 800, 520);
+            ctx.fillRect(0, 0, 1320, 800);
             
             ctx.fillStyle = "white";
             ctx.font = "25px Arial";
             /* ctx.fillText('SCORE: ' + score, 10, 30); */
 
-            player1.c = random_rgba();
+            player.c = random_rgba();
 
             //player1.dibujar(ctx);
-            ctx.drawImage(bee, player1.x, player1.y);
+            ctx.drawImage(knight, player.x, player.y);
             
             //player2.dibujar(ctx);
-            ctx.drawImage(flor, player2.x, player2.y);
+            ctx.drawImage(minotauro, enemy.x, enemy.y);
              
-            paredes.forEach(pared => {
-                ctx.drawImage(techo, pared.x, pared.y, pared.w, pared.h);
+            roofs.forEach(roof => {
+                ctx.drawImage(roofi, roof.x, roof.y, roof.w, roof.h);
             });
 
-            techos.forEach(techo => {
-                ctx.drawImage(wall, techo.x, techo.y, techo.w, techo.h);
+            walls.forEach(wall => {
+                ctx.drawImage(walli, wall.x, wall.y, wall.w, wall.h);
+            });
+            
+            floors.forEach(floor => {
+                ctx.drawImage(floori, floor.x, floor.y, floor.w, floor.h);
             });
 
             if (!pause) {
                 update();
             } else {
-                ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-                ctx.fillRect(0, 0, 800, 520); 
+                ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
+                ctx.fillRect(0, 0, 1320, 800); 
                 ctx.fillStyle = "white";
                 ctx.font = "25px Arial"; 
                 ctx.fillText('P A U S E', 350, 260);
@@ -150,37 +231,37 @@
 
         function update() {
             if (direction == 'right') {
-                player1.x += speed; 
-                if (player1.x > 800) {
-                    player1.x = 0;
+                player.x += speed; 
+                if (player.x > 1240) {
+                    player.x = 40;
                 }
             } 
 
             if (direction == 'left') {
-                player1.x -= speed; 
-                if (player1.x < 0) {
-                    player1.x = 800;
+                player.x -= speed; 
+                if (player.x < 40) {
+                    player.x = 1240;
                 }
             }
 
             if (direction == 'down') {
-                player1.y += speed; 
-                if (player1.y > 500) {
-                    player1.y = 0;
+                player.y += speed; 
+                if (player.y > 700) {
+                    player.y = 80
                 }
             }
 
             if (direction == 'up') {
-                player1.y -= speed; 
-                if (player1.y < 0) {
-                    player1.y = 500;
+                player.y -= speed; 
+                if (player.y < 80) {
+                    player.y = 700;
                 }
             }
 
-            if (player1.se_tocan(player2)) {
+            if (player.se_tocan(enemy)) {
 
-                player2.x = generateRandomInteger(500);
-                player2.y = generateRandomInteger(500);
+                enemy.x = generateRandomInteger(500);
+                enemy.y = generateRandomInteger(500);
 
                 score += 10;
                 /* speed += 5; */
@@ -189,21 +270,21 @@
                 
             }
             
-            if (player1.se_tocan(pared)) {
+            if (player.se_tocan(pared)) {
                 if (direction == 'right') {
-                    player1.x -= speed;
+                    player.x -= speed;
                 }
 
                 if (direction == 'left') {
-                    player1.x += speed;
+                    player.x += speed;
                 }
 
                 if (direction == 'down') {
-                    player1.y -= speed;
+                    player.y -= speed;
                 }
 
                 if (direction == 'up') {
-                    player1.y += speed;
+                    player.y += speed;
                 }
             }
         }
