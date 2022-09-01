@@ -15,15 +15,17 @@
         var cv = null;
         var ctx = null;
         var player = null;
-        var enemy = null;
-        var enemy2 = null;
-        var finish = null;
+        var enemy = null, enemy2 = null, enemy3 = null;
+        var meta1 = null, meta2 = null;
         var flag = false;
         
         var roofs = new Array();
         var walls = new Array()
         var floors = new Array();
-        
+
+        var wall_sword = null, wall_axe = null, wall_knife = null, wall_flag = null, wall_map = null;
+        var wall_papers = new Array();
+
         var super_x = 40, super_y = 280;
         var direction = 'right';
         var speed = 0;
@@ -32,10 +34,19 @@
 
         var knight = new Image();
         var minotauro = new Image();
+
         var walli = new Image();
         var roofi = new Image();
         var floori = new Image();
+
         var meta = new Image();
+
+        var w_sword = new Image();
+        var w_axe = new Image();
+        var w_knife = new Image();
+        var w_paper = new Image();
+        var w_flag = new Image();
+        var w_map = new Image();
 
         var sonido1 = new Audio();
         var sonido2 = new Audio();
@@ -50,13 +61,29 @@
 
             player = new Cuadrado(super_x, super_y, 30, 30, "white");
             
-            // enemy = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "white");
             enemy = new Cuadrado(600, 80, 40, 40, "white");
             enemy2 = new Cuadrado(400, 280, 40, 40, "white");
             enemy3 = new Cuadrado(760, 480, 40, 40, "white");
 
             meta1 = new Cuadrado(1280, 280, 40, 40, "white");
             meta2 = new Cuadrado(1280, 680, 40, 40, "white");
+
+            // Adornos
+            wall_sword = new Cuadrado(400, 240, 40, 40, "white"); 
+            wall_axe = new Cuadrado(600, 240, 40, 40, "white"); 
+            wall_knife = new Cuadrado(800, 240, 40, 40, "white");
+
+            wall_flag = new Cuadrado(120, 40, 40, 40, "white"); 
+            wall_map = new Cuadrado(880, 40, 40, 40, "white"); 
+
+            for (let i = 0; i < 1319; i+=40) {
+                for (let j = 0; j < 799; j+=40) {
+                    if (j == 160 && i == 1120 || j == 240 && i == 80
+                        || j == 400 && i == 920 || j == 640 && i == 200) {
+                        wall_papers.push(new Cuadrado(i, j, 40, 40, "white"));
+                    }
+                }
+            }
 
             // Roof
             for (let i = 0; i < 1319; i+=40) {
@@ -385,9 +412,18 @@
 
             knight.src = 'cf.png';
             minotauro.src = 'mf.png';
+
             walli.src = 'wall.png';
             roofi.src = 'roof.png';
             floori.src = 'floor.png';
+
+            w_sword.src = 'wall-swords.png';
+            w_axe.src = 'wall-axes.png';
+            w_knife.src = 'wall-knifes.png';
+            w_paper.src = 'wall-paper.png';
+            w_flag.src = 'wall-flag.png';
+            w_map.src = 'wall-map.png';
+
             meta.src = 'flag.png';
 
             sonido1.src = "no.mp3";
@@ -398,13 +434,10 @@
         }
 
         function paint() {
-            
             window.requestAnimationFrame(paint);
 
             ctx.fillStyle = "white";
             ctx.fillRect(0, 0, 1320, 760);
-
-            player.c = random_rgba();
 
             roofs.forEach(roof => {
                 ctx.drawImage(roofi, roof.x, roof.y, roof.w, roof.h);
@@ -417,12 +450,22 @@
             floors.forEach(floor => {
                 ctx.drawImage(floori, floor.x, floor.y, floor.w, floor.h);
             });
+            
+            wall_papers.forEach(wallpaper => {
+                ctx.drawImage(w_paper, wallpaper.x, wallpaper.y, wallpaper.w, wallpaper.h);
+            });
 
             ctx.drawImage(knight, player.x, player.y);
              
             ctx.drawImage(minotauro, enemy.x, enemy.y);
             ctx.drawImage(minotauro, enemy2.x, enemy2.y);
             ctx.drawImage(minotauro, enemy3.x, enemy3.y);
+
+            ctx.drawImage(w_sword, wall_sword.x, wall_sword.y)
+            ctx.drawImage(w_axe, wall_axe.x, wall_axe.y)
+            ctx.drawImage(w_knife, wall_knife.x, wall_knife.y)
+            ctx.drawImage(w_flag, wall_flag.x, wall_flag.y)
+            ctx.drawImage(w_map, wall_map.x, wall_map.y)
 
             ctx.drawImage(meta, meta1.x, meta1.y);
             ctx.drawImage(meta, meta2.x, meta2.y);
@@ -581,8 +624,6 @@
             });
             
         }
-
-        /* time = setInterval(contar(time), 1000); */
         
         document.addEventListener('keydown', (e) => {
             // Arriba
