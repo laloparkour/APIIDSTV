@@ -7,7 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    <canvas id="mycanvas" width="1320" height="800">
+    <div id="number"></div>
+    <canvas id="mycanvas" width="1320" height="760">
         Tu navegador no soporta canvas
     </canvas>
     <script text="text/javascript">
@@ -15,26 +16,27 @@
         var ctx = null;
         var player = null;
         var enemy = null;
-
-        var pared = null;
-
+        var finish = null;
+        
         var roofs = new Array();
         var walls = new Array()
         var floors = new Array();
-
-        var super_x = 0, super_y = 280;
         
+        var super_x = 40, super_y = 280;
         var direction = 'right';
-        var score = 0;
-        var speed = 0;
+        var speed = 3;
+        var time = 0;
 
         var knight = new Image();
         var minotauro = new Image();
         var walli = new Image();
         var roofi = new Image();
         var floori = new Image();
+        var meta = new Image();
 
         var sonido1 = new Audio();
+        var sonido2 = new Audio();
+        var sonido3 = new Audio();
 
         var pause = false;
       
@@ -43,10 +45,13 @@
             ctx = cv.getContext('2d');
             ctx.strokeStyle = "rgba(1, 1, 1, 0)";
 
-            player = new Cuadrado(super_x, super_y, 40, 40, "white");
+            player = new Cuadrado(super_x, super_y, 30, 30, "white");
 
             // enemy = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "white");
-            enemy = new Cuadrado(1280, 280, 40, "white");
+            enemy = new Cuadrado(600, 80, 40, 40, "white");
+
+            meta1 = new Cuadrado(1280, 280, 40, 40, "white");
+            meta2 = new Cuadrado(1280, 680, 40, 40, "white");
 
             // Roof
             for (let i = 0; i < 1319; i+=40) {
@@ -55,12 +60,16 @@
                         roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
                     
-                    if (i == 0 && j < 220 || i == 0 && j < 720) {
-                        roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                    if (i == 0) {
+                        if (j < 220 || j > 300) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
                     }
-                     
-                    if (i == 1280 && j < 260 || i == 1280 && j < 680) { 
-                        roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                    
+                    if (i == 1280) {
+                        if (j < 260 || j > 300 && j < 680) { 
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
                     }
 
                     if (i < 1319 && j == 720) {
@@ -173,7 +182,7 @@
                     }
                     
                 }
-            };
+            }; 
             
             // Walls
             for (let i = 0; i < 1319; i+=40) {
@@ -188,7 +197,7 @@
                             || i >= 480 && i < 560
                             || i >= 680 && i < 760
                             || i >= 880 && i < 960
-                            || i >= 1000 && i < 1160
+                            || i > 1000 && i < 1160
                             || i > 1160 && i < 1280) { 
                             walls.push(new Cuadrado(i, j, 40, 40, "green"));
                         }
@@ -210,8 +219,8 @@
                     }
 
                     if (j == 360) {
-                        if (i > 0 && i < 180 || i > 220 && i < 360 || i > 440 && i < 540 
-                            || i > 540 && i < 700 || i > 740 && i < 860) {
+                        if (i > 0 && i < 180 || i > 260 && i < 360 || i > 400 && i < 540 
+                            || i > 580 && i < 700 || i > 740 && i < 860) {
                             walls.push(new Cuadrado(i, j, 40, 40, "green"));
                         }
                     }
@@ -369,16 +378,16 @@
                 }
             };
 
-
-            pared = new Cuadrado(20, 80, 30, 300, "red");
-
             knight.src = 'cf.png';
             minotauro.src = 'mf.png';
             walli.src = 'wall.png';
             roofi.src = 'roof.png';
             floori.src = 'floor.png';
+            meta.src = 'flag.png';
 
-            sonido1.src = "no.mp3"
+            sonido1.src = "no.mp3";
+            sonido2.src = "balasos.mp3";
+            sonido3.src = "victory.mp3";
 
             paint();
         }
@@ -387,11 +396,7 @@
             window.requestAnimationFrame(paint);
             
             ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, 1320, 800);
-            
-            ctx.fillStyle = "white";
-            ctx.font = "25px Arial";
-            /* ctx.fillText('SCORE: ' + score, 10, 30); */
+            ctx.fillRect(0, 0, 1320, 760);
 
             player.c = random_rgba();
 
@@ -409,18 +414,26 @@
 
             //player1.dibujar(ctx);
             ctx.drawImage(knight, player.x, player.y);
-            
+             
             //player2.dibujar(ctx);
             ctx.drawImage(minotauro, enemy.x, enemy.y);
+
+            ctx.drawImage(meta, meta1.x, meta1.y);
+            ctx.drawImage(meta, meta2.x, meta2.y);
+
+            ctx.fillStyle = "white";
+            ctx.font = "30px Arial";
+            ctx.fillText('Tiempo: ' + time, 0, 30);
 
             if (!pause) {
                 update();
             } else {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
-                ctx.fillRect(0, 0, 1320, 800); 
+                ctx.fillRect(0, 0, 1320, 760); 
                 ctx.fillStyle = "white";
-                ctx.font = "25px Arial"; 
-                ctx.fillText('P A U S E', 350, 260);
+                ctx.font = "50px Arial"; 
+                ctx.fillText('P A U S E', 570, 380);
+                sonido2.pause();
             }
         }
 
@@ -449,63 +462,110 @@
         }
 
         function update() {
+
+            time = setInterval(contar(time), 1000);
+
+/*             sonido2.play();
+            sonido2.loop = true; */
+
             if (direction == 'right') {
                 player.x += speed; 
-                if (player.x > 1240) {
+/*                 if (player.x > 1280) {
                     player.x = 40;
-                }
+                } */
             } 
 
             if (direction == 'left') {
                 player.x -= speed; 
-                if (player.x < 40) {
-                    player.x = 1240;
+                if (player.x < 0) {
+                    player.x =- speed;
                 }
             }
 
             if (direction == 'down') {
                 player.y += speed; 
-                if (player.y > 700) {
-                    player.y = 80
-                }
+/*                 if (player.y > 700) {
+                    player.y = 80;
+                } */
             }
 
             if (direction == 'up') {
                 player.y -= speed; 
-                if (player.y < 80) {
+/*                 if (player.y < 40) {
                     player.y = 700;
-                }
+                } */
+            }
+
+            // Enemigo
+            enemy.y += speed;
+            if (enemy.y > 160) {
+                enemy.y = 80;
             }
 
             if (player.se_tocan(enemy)) {
 
-                enemy.x = generateRandomInteger(500);
-                enemy.y = generateRandomInteger(500);
+/*                 enemy.x = generateRandomInteger(500);
+                enemy.y = generateRandomInteger(500); */
 
-                score += 10;
-                /* speed += 5; */
+                player.x = 0;
+                player.y = 280;
 
                 sonido1.play();
                 
             }
-            
-            if (player.se_tocan(pared)) {
-                if (direction == 'right') {
-                    player.x -= speed;
-                }
 
-                if (direction == 'left') {
-                    player.x += speed;
-                }
-
-                if (direction == 'down') {
-                    player.y -= speed;
-                }
-
-                if (direction == 'up') {
-                    player.y += speed;
-                }
+            if (player.se_tocan(meta1)) {
+                player.x = 0;
+                player.y = 280;
+                sonido3.play();
             }
+
+            if (player.se_tocan(meta2)) {
+                player.x = 0;
+                player.y = 280;
+                sonido3.play();
+            }
+            
+            roofs.forEach(r => {
+                if (player.se_tocan(r)) {
+                    if (direction == 'right') {
+                        player.x -= speed;
+                    }
+
+                    if (direction == 'left') {
+                        player.x += speed;
+                    }
+
+                    if (direction == 'down') {
+                        player.y -= speed;
+                    }
+
+                    if (direction == 'up') {
+                        player.y += speed;
+                    }
+                } 
+            });
+
+            walls.forEach(w => {
+                if (player.se_tocan(w)) {
+                    if (direction == 'right') {
+                        player.x -= speed;
+                    }
+
+                    if (direction == 'left') {
+                        player.x += speed;
+                    }
+
+                    if (direction == 'down') {
+                        player.y -= speed;
+                    }
+
+                    if (direction == 'up') {
+                        player.y += speed;
+                    }
+                } 
+            });
+            
         }
 
         document.addEventListener('keydown', (e) => {
@@ -535,8 +595,9 @@
             
         });
 
+        
         window.addEventListener('load', start);
-
+        
         window.requestAnimationFrame = (function () {
             // Son paquetes que dependen del navegador que utilizemos
             return window.requestAnimationFrame || 
@@ -546,6 +607,10 @@
                 window.setTimeout(callback, 17);
             };
         }());
+
+        function contar(time) {
+            time++;
+        }
 
         function random_rgba() {
             var o = Math.round, r = Math.random, s = 255;
