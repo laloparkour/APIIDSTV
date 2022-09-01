@@ -16,7 +16,9 @@
         var ctx = null;
         var player = null;
         var enemy = null;
+        var enemy2 = null;
         var finish = null;
+        var flag = false;
         
         var roofs = new Array();
         var walls = new Array()
@@ -24,8 +26,9 @@
         
         var super_x = 40, super_y = 280;
         var direction = 'right';
-        var speed = 3;
-        var time = 0;
+        var speed = 0;
+        var speedMonster = 2;
+        var time = 1;
 
         var knight = new Image();
         var minotauro = new Image();
@@ -46,9 +49,11 @@
             ctx.strokeStyle = "rgba(1, 1, 1, 0)";
 
             player = new Cuadrado(super_x, super_y, 30, 30, "white");
-
+            
             // enemy = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "white");
             enemy = new Cuadrado(600, 80, 40, 40, "white");
+            enemy2 = new Cuadrado(400, 280, 40, 40, "white");
+            enemy3 = new Cuadrado(760, 480, 40, 40, "white");
 
             meta1 = new Cuadrado(1280, 280, 40, 40, "white");
             meta2 = new Cuadrado(1280, 680, 40, 40, "white");
@@ -386,15 +391,16 @@
             meta.src = 'flag.png';
 
             sonido1.src = "no.mp3";
-            sonido2.src = "balasos.mp3";
+            sonido2.src = "dungeon.mp3";
             sonido3.src = "victory.mp3";
 
             paint();
         }
 
         function paint() {
-            window.requestAnimationFrame(paint);
             
+            window.requestAnimationFrame(paint);
+
             ctx.fillStyle = "white";
             ctx.fillRect(0, 0, 1320, 760);
 
@@ -412,11 +418,11 @@
                 ctx.drawImage(floori, floor.x, floor.y, floor.w, floor.h);
             });
 
-            //player1.dibujar(ctx);
             ctx.drawImage(knight, player.x, player.y);
              
-            //player2.dibujar(ctx);
             ctx.drawImage(minotauro, enemy.x, enemy.y);
+            ctx.drawImage(minotauro, enemy2.x, enemy2.y);
+            ctx.drawImage(minotauro, enemy3.x, enemy3.y);
 
             ctx.drawImage(meta, meta1.x, meta1.y);
             ctx.drawImage(meta, meta2.x, meta2.y);
@@ -434,6 +440,14 @@
                 ctx.font = "50px Arial"; 
                 ctx.fillText('P A U S E', 570, 380);
                 sonido2.pause();
+            }
+
+            if (flag) {
+                ctx.fillStyle = "white";
+                ctx.font = "50px Arial";
+                ctx.fillText('Ganaste', 570, 380);
+            } else {
+                ctx.fillText(' ', 570, 380);
             }
         }
 
@@ -462,68 +476,68 @@
         }
 
         function update() {
-
-            time = setInterval(contar(time), 1000);
-
-/*             sonido2.play();
-            sonido2.loop = true; */
+            sonido2.play();
+            sonido2.loop = true;
 
             if (direction == 'right') {
                 player.x += speed; 
-/*                 if (player.x > 1280) {
-                    player.x = 40;
-                } */
             } 
 
             if (direction == 'left') {
                 player.x -= speed; 
-                if (player.x < 0) {
-                    player.x =- speed;
-                }
             }
 
             if (direction == 'down') {
                 player.y += speed; 
-/*                 if (player.y > 700) {
-                    player.y = 80;
-                } */
             }
 
             if (direction == 'up') {
                 player.y -= speed; 
-/*                 if (player.y < 40) {
-                    player.y = 700;
-                } */
             }
 
             // Enemigo
-            enemy.y += speed;
-            if (enemy.y > 160) {
-                enemy.y = 80;
+            enemy.x += speedMonster;
+            if (enemy.x > 1240) {
+                enemy.x = 40;
+            }
+            
+            enemy2.x += speedMonster;
+            if (enemy2.x > 940) {
+                enemy2.x = 400;
+            }
+
+            enemy3.y += 1;
+            if (enemy3.y > 680) {
+                enemy3.y = 480;
             }
 
             if (player.se_tocan(enemy)) {
-
-/*                 enemy.x = generateRandomInteger(500);
-                enemy.y = generateRandomInteger(500); */
-
                 player.x = 0;
                 player.y = 280;
-
+                time = 0;
                 sonido1.play();
-                
             }
 
-            if (player.se_tocan(meta1)) {
+            if (player.se_tocan(enemy2)) {
                 player.x = 0;
                 player.y = 280;
-                sonido3.play();
+                time = 0;
+                sonido1.play();
             }
 
-            if (player.se_tocan(meta2)) {
+            if (player.se_tocan(enemy3)) {
                 player.x = 0;
                 player.y = 280;
+                time = 0;
+                sonido1.play();
+            }
+            
+            if (player.se_tocan(meta1) || player.se_tocan(meta2)) {
+                player.x = 0;
+                player.y = 280;
+                time = 0;
                 sonido3.play();
+                flag = true;
             }
             
             roofs.forEach(r => {
@@ -568,29 +582,62 @@
             
         }
 
+        /* time = setInterval(contar(time), 1000); */
+        
         document.addEventListener('keydown', (e) => {
             // Arriba
             if (e.keyCode == 87 || e.keyCode == 38) {
                 direction = 'up';
+                speed = 3;
             }
             
             // Abajo
             if (e.keyCode == 83 || e.keyCode == 40) {
                 direction = 'down';
+                speed = 3;
             }
             
             // Izquierda
             if (e.keyCode == 65 || e.keyCode == 37) {
                 direction = 'left';
+                speed = 3;
             }
             
             // Derecha
             if (e.keyCode == 68 || e.keyCode == 39) {
                 direction = 'right';
+                speed = 3;
             }
             // Pausa
             if (e.keyCode == 32) {
                 pause = (pause) ? false : true;
+            }
+            
+        });
+
+        document.addEventListener('keyup', (e) => {
+            // Arriba
+            if (e.keyCode == 87 || e.keyCode == 38) {
+                direction = 'up';
+                speed = 0;
+            }
+            
+            // Abajov
+            if (e.keyCode == 83 || e.keyCode == 40) {
+                direction = 'down';
+                speed = 0;
+            }
+            
+            // Izquierda
+            if (e.keyCode == 65 || e.keyCode == 37) {
+                direction = 'left';
+                speed = 0;
+            }
+            
+            // Derecha
+            if (e.keyCode == 68 || e.keyCode == 39) {
+                direction = 'right';
+                speed = 0;
             }
             
         });
@@ -608,10 +655,11 @@
             };
         }());
 
-        function contar(time) {
-            time++;
-        }
-
+        
+        window.setInterval(function() {
+            time++
+        }, 1000);
+        
         function random_rgba() {
             var o = Math.round, r = Math.random, s = 255;
             return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
