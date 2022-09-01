@@ -22,7 +22,7 @@
         var walls = new Array()
         var floors = new Array();
 
-        var super_x = 240, super_y = 240;
+        var super_x = 0, super_y = 280;
         
         var direction = 'right';
         var score = 0;
@@ -43,11 +43,11 @@
             ctx = cv.getContext('2d');
             ctx.strokeStyle = "rgba(1, 1, 1, 0)";
 
-            player = new Cuadrado(super_x, super_y, 40, 40, "white"); 
+            player = new Cuadrado(super_x, super_y, 40, 40, "white");
 
-            enemy = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "white");
+            // enemy = new Cuadrado(generateRandomInteger(500), generateRandomInteger(500), 40, 40, "white");
+            enemy = new Cuadrado(1280, 280, 40, "white");
 
-            
             // Roof
             for (let i = 0; i < 1319; i+=40) {
                 for (let j = 0; j < 799; j+=40) {
@@ -55,11 +55,15 @@
                         roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
                     
-                    if (i == 0 && j >= 40 && j < 799) {
+                    if (i == 0 && j < 220 || i == 0 && j < 720) {
                         roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
                      
-                    if (i == 1280 && j >= 40 && j < 799) { 
+                    if (i == 1280 && j < 260 || i == 1280 && j < 720) { 
+                        roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                    }
+
+                    if (i < 1319 && j == 720) {
                         roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
 
@@ -94,10 +98,80 @@
                             roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                         }
                     }
-
-                    if (i < 1319 && j == 760) {
-                        roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                    
+                    if (j == 240) {
+                        if (i > 920 && i < 1120 || i == 1160) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
                     }
+
+                    if (j == 280) {
+                        if (i == 960 || i == 1160) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 320) {
+                        if (i > 0 && i < 240 || i > 240 && i < 400 || i > 400 && i < 560
+                            || i > 560 && i < 1000) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 360) {
+                        if (i == 200 || i == 360 || i == 440 || i == 720 || i > 840 && i < 1320) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 400) {
+                        if (i == 200 || i == 360 || i == 440 || i == 720) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 440) {
+                        if (i > 80 && i < 320 || i == 360 || i > 400 && i < 760 || i == 800) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 480) {
+                        if (i == 120 || i == 360 || i == 800 || i == 920 || i > 1000 && i < 1240) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 520) {
+                        if (i == 120 || i == 360 || i > 760 && i < 1080) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 560) {
+                        if (i == 120 || i == 360 || i == 440 || i == 800 || i == 920 || i == 1040) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 600) {
+                        if (i > 80 && i < 400 || i > 400 && i < 760 || i == 800 || i == 920 || i == 1040 || i > 1080 && i < 1280) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 640) {
+                        if (i == 720 || i == 1040) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+
+                    if (j == 680) {
+                        if (i == 720 || i == 1040) {
+                            roofs.push(new Cuadrado(i, j, 40, 40, "white"));
+                        }
+                    }
+                    
                 }
             };
             
@@ -119,6 +193,59 @@
                             walls.push(new Cuadrado(i, j, 40, 40, "green"));
                         }
                     }
+                    
+                    if (j == 240) {
+                        if (i >= 0 && i < 160 || i == 200
+                            || i > 320 && i < 460
+                            || i > 520 && i < 680
+                            || i > 740 && i < 860) {
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+                    
+                    if (j == 280) {
+                        if (i > 960 && i < 1120) {
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 360) {
+                        if (i > 0 && i < 180 || i > 220 && i < 360 || i > 440 && i < 540 
+                            || i > 540 && i < 700 || i > 740 && i < 860) {
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 400) {
+                        if (i > 840 && i < 1280) {
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 480) {
+                        if (i > 120 && i < 320 || i > 400 && i < 740) {
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 520) {
+                        if (i > 1040 && i < 1240) {
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 560) {
+                        if (i > 800 && i < 920 || i > 940 && i < 1040) {
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 640) {
+                        if (i > 80 && i < 400 || i > 400 && i < 700 || i == 800 || i == 920 || i > 1100 && i < 1280) {
+                            walls.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
                 }
             };
             
@@ -147,6 +274,98 @@
                             floors.push(new Cuadrado(i, j, 40, 40, "green"));
                         }
                     }
+                    
+                    if (j == 200) {
+                        if (i == 160 ||  i > 200 && i <= 320
+                            || i > 460 && i < 540
+                            || i > 640 && i < 760
+                            || i > 840 && i < 960
+                            || i > 960 && i < 1160
+                            || i > 1160 && i < 1280) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+                    
+                    if (j == 240) {
+                        if (i == 160 || i > 200 && i < 360
+                            || i > 440 && i < 560
+                            || i > 640 && i < 760
+                            || i > 840 && i < 960
+                            || i == 1120 || i > 1160 && i < 1280) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 280) {
+                        if (i >= 0 && i < 960 || i == 1120 || i >= 1180 && i < 1320) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 320) {
+                        if (i == 240 || i == 400 || i == 560 || i > 960 && i < 1280) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 360) {
+                        if (i == 240 || i == 400 || i == 560) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 400) {
+                        if (i > 0 && i < 200 || i > 200 && i < 360 || i == 400
+                            || i > 440 && i < 720 || i > 720 && i < 880) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 440) {
+                        if (i > 0 && i < 120 || i == 320 || i == 400 || i == 760 || i > 800 && i < 1280) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 480) {
+                        if (i > 0 && i < 120 || i == 320 || i == 400 || i == 760 
+                            || i > 800 && i < 920 
+                            || i > 920 && i < 1040 
+                            || i == 1240) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 520) {
+                        if (i > 0 && i < 120 || i > 120 && i < 360 || i > 360 && i < 800 || i == 1240) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 560) {
+                        if (i > 0 && i < 120 || i > 120 && i < 360 || i == 400 || i > 440 && i < 800 || i > 1040 && i < 1240 || i == 1240) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 600) {
+                        if (i > 0 && i < 120 || i == 400 || i == 760 || i > 800 && i < 920 || i > 920 && i < 1040 || i == 1080) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 640) {
+                        if (i > 0 && i < 120 || i == 400 || i == 760 || i > 800 && i < 920 || i > 920 && i < 1040 || i == 1080) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+
+                    if (j == 680) {
+                        if (i > 0 && i < 720 || i > 720 && i < 1040 || i > 1040 && i < 1280) {
+                            floors.push(new Cuadrado(i, j, 40, 40, "green"));
+                        }
+                    }
+                
                 }
             };
 
@@ -176,16 +395,10 @@
 
             player.c = random_rgba();
 
-            //player1.dibujar(ctx);
-            ctx.drawImage(knight, player.x, player.y);
-            
-            //player2.dibujar(ctx);
-            ctx.drawImage(minotauro, enemy.x, enemy.y);
-             
             roofs.forEach(roof => {
                 ctx.drawImage(roofi, roof.x, roof.y, roof.w, roof.h);
             });
-
+            
             walls.forEach(wall => {
                 ctx.drawImage(walli, wall.x, wall.y, wall.w, wall.h);
             });
@@ -193,6 +406,12 @@
             floors.forEach(floor => {
                 ctx.drawImage(floori, floor.x, floor.y, floor.w, floor.h);
             });
+
+            //player1.dibujar(ctx);
+            ctx.drawImage(knight, player.x, player.y);
+            
+            //player2.dibujar(ctx);
+            ctx.drawImage(minotauro, enemy.x, enemy.y);
 
             if (!pause) {
                 update();
