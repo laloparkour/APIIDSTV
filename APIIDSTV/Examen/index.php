@@ -59,7 +59,7 @@
                         roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
                      
-                    if (i == 1280 && j < 260 || i == 1280 && j < 720) { 
+                    if (i == 1280 && j < 260 || i == 1280 && j < 680) { 
                         roofs.push(new Cuadrado(i, j, 40, 40, "white"));
                     }
 
@@ -361,7 +361,7 @@
                     }
 
                     if (j == 680) {
-                        if (i > 0 && i < 720 || i > 720 && i < 1040 || i > 1040 && i < 1280) {
+                        if (i > 0 && i < 720 || i > 720 && i < 1040 || i > 1040 && i < 1320) {
                             floors.push(new Cuadrado(i, j, 40, 40, "green"));
                         }
                     }
