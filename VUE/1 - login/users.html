@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue</title>
+</head>
+<body>
+
+    <div id="contenedor">
+        <h1>
+            Bienvenido {{ user }}
+        </h1>
+
+        <table>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Website</th>
+              <th>Actions</th>
+            </tr>
+            <tr v-for="u in users">
+                <td>{{ u.id }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.phone }}</td>
+                <td>{{ u.website }}</td>
+                <td>
+                    <button>Ver</button>
+                    <button>Eliminar</button>
+                </td>
+            </tr>
+          </table>
+
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script type="text/javascript">
+
+        const { createApp } = Vue;
+
+        const { app } = createApp({
+            data() {
+                return {
+                    users: null,
+                    user: '',
+                }
+            },
+            methods: {
+                
+            },
+            mounted() {
+
+                let user = localStorage.getItem('user');
+                user = JSON.parse(user);
+                console.log(user.name);
+                this.user = user.name;
+
+                fetch('data/users.json')
+                .then((res) => res.json())
+                .then((json) => ( this.users = json ))
+                .catch((err) => ( alert('no data') ))
+            },
+        }).mount('#contenedor');
+
+        // mount =  es un objeto de tipo vue y despues se lo montamos al contenedor
+
+        // mounted = es algo que se va ejecutar cuando el evento del montado de vue se ejecute por lo tanto se va a ejecutar la primera vez cuando vue se ejecute, dentro de mounted se pueden crear metodo y invocarlos
+
+    </script>
+</body>
+</html>

@@ -49,13 +49,27 @@
                     let acces = this.users.map(function(u) {
                         if (tmp_mail === u.email) {
                             if (tmp_pwd === u.password) {
+
+                                let tmp_usr = {
+                                    id: u.id,
+                                    name: u.name,
+                                    username: u.username,
+                                    email: u.email,
+                                    phone: u.phone,
+                                    website: u.website,
+                                };
+                                
                                 alert("correctos");
-                                // windows location
+
+                                localStorage.setItem('user', JSON.stringify(tmp_usr));
+                                
+                                window.location.href = 'users.html';
+                                 
                             }
                         }
                     })
 
-                    alert("datos incorrectos");
+                    alert("Datos incorrectos");
                     
                     e.preventDefault();
                     
