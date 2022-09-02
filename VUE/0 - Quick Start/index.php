@@ -110,6 +110,8 @@
                 },
                 addPalomilla() {
                     this.palomilla.push({name:this.a_name, role:this.role});
+                    this.a_name = "";
+                    this.role = "";
                 }
             },
         }).mount('#contenedor');
