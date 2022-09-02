@@ -23,9 +23,10 @@
         var walls = new Array()
         var floors = new Array();
 
-        var wall_sword = null, wall_axe = null, wall_knife = null, wall_flag = null, wall_map = null;
+        var wall_sword = null, wall_axe = null, wall_knife = null, 
+            wall_flag = null, wall_map = null, wall_table_book = null;
         var wall_papers = new Array();
-
+        
         var super_x = 40, super_y = 280;
         var direction = 'right';
         var speed = 0;
@@ -47,6 +48,7 @@
         var w_paper = new Image();
         var w_flag = new Image();
         var w_map = new Image();
+        var w_book = new Image();
 
         var sonido1 = new Audio();
         var sonido2 = new Audio();
@@ -75,6 +77,7 @@
 
             wall_flag = new Cuadrado(120, 40, 40, 40, "white"); 
             wall_map = new Cuadrado(880, 40, 40, 40, "white"); 
+            wall_table_book = new Cuadrado(240, 480, 40, 40, "white"); 
 
             for (let i = 0; i < 1319; i+=40) {
                 for (let j = 0; j < 799; j+=40) {
@@ -423,6 +426,7 @@
             w_paper.src = 'wall-paper.png';
             w_flag.src = 'wall-flag.png';
             w_map.src = 'wall-map.png';
+            w_book.src = 'wall-table-books.png'
 
             meta.src = 'flag.png';
 
@@ -466,6 +470,7 @@
             ctx.drawImage(w_knife, wall_knife.x, wall_knife.y)
             ctx.drawImage(w_flag, wall_flag.x, wall_flag.y)
             ctx.drawImage(w_map, wall_map.x, wall_map.y)
+            ctx.drawImage(w_book, wall_table_book.x, wall_table_book.y)
 
             ctx.drawImage(meta, meta1.x, meta1.y);
             ctx.drawImage(meta, meta2.x, meta2.y);
@@ -523,11 +528,14 @@
             sonido2.loop = true;
 
             if (direction == 'right') {
-                player.x += speed; 
+                player.x += speed;
             } 
 
             if (direction == 'left') {
-                player.x -= speed; 
+                player.x -= speed;
+                if (player.x < 0) {
+                    player.x = 0;
+                } 
             }
 
             if (direction == 'down') {
