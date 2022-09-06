@@ -14,10 +14,10 @@
                 <legend>
                     Datos de acceso
                 </legend>
-                <label for="">Correo electronico</label>
+                <label>Correo electronico</label>
                 <input type="text" v-model="email">
                 <br>
-                <label for="">Password</label>
+                <label>Password</label>
                 <input type="password" v-model="password">
                 <br>
                 <button @click="login">
@@ -59,7 +59,7 @@
                                     website: u.website,
                                 };
                                 
-                                alert("correctos");
+                                alert("Correctos");
 
                                 localStorage.setItem('user', JSON.stringify(tmp_usr));
                                 
