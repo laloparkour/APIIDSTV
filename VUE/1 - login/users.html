@@ -36,8 +36,8 @@
                 <td>{{ u.phone }}</td>
                 <td>{{ u.website }}</td>
                 <td>
-                    <button class="btn btn-primary">Ver</button>
-                    <button class="btn btn-danger">Eliminar</button>
+                    <button class="btn btn-primary">Edit</button>
+                    <button class="btn btn-danger">Delete</button>
                 </td>
             </tr>
           </table>
@@ -101,23 +101,47 @@
                     this.showForm = !this.showForm;
                 },
                 guardar(e){
-                    console.log("Guardar");
+                    console.log(this.id);
+                    
+                    if (this.name == '' || this.username == '' || this.password == '' || this.email == ''
+                    || this.phone == '' || this.website == '') {
+                        alert("Campos vacíos");
+                    } else {
+                        this.id = this.id + 1;
+                        
+                        let new_usr = {
+                            id: this.id,
+                            name: this.name,
+                            username: this.username,
+                            password: this.password,
+                            email: this.email,
+                            phone: this.phone,
+                            website: this.website,
+                        };
+    
+                        this.users.push(new_usr);
+                        this.limpiarCampos();
+                        this.showHide();
+                    }
+
                     e.preventDefault();
+
                 },
                 cancelar(e){
-                    console.log("Cancelar");
-                    this.showBtn = !this.showBtn;
-                    this.showTable = !this.showTable;
-                    this.showForm = !this.showForm;
+                    
+                    this.showHide();
 
+                    this.limpiarCampos();
+
+                    e.preventDefault();
+                },
+                limpiarCampos() {
                     this.name = '';
                     this.username = '';
                     this.password = '';
                     this.email = '';
                     this.phone = '';
                     this.website = '';
-
-                    e.preventDefault();
                 }
             },
             mounted() {
@@ -126,6 +150,8 @@
                 user = JSON.parse(user);
 
                 this.user = user.name;
+
+                
 
                 fetch('data/users.json')
                 .then((res) => res.json())
