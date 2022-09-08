@@ -17,9 +17,10 @@
         </h1>
 
         <!-- Botón para añadir un nuevo usuario -->
-        <button class="btn btn-success" @click="showHide" v-if="showBtn">Agregar nuevo usuario</button>
+        <button class="btn btn-success" @click="action('agregar', null)">Agregar nuevo usuario</button>
+        <!-- v-if="showBtn" -->
 
-        <table class="table" v-if="showTable">
+        <table class="table" v-if="(mostrar == 'show')">
             <tr>
               <th>Id</th>
               <th>Name</th>
@@ -37,38 +38,40 @@
                 <td>{{ u.phone }}</td>
                 <td>{{ u.website }}</td>
                 <td>
-                    <button class="btn btn-primary">Edit</button>
+                    <button class="btn btn-primary" @click="action('editar', u)">Edit</button>
                     <button class="btn btn-danger" @click="eliminar(i)">Delete</button>
                 </td>
             </tr>
           </table>
 
-          <form action="" v-if="showForm">
-            <legend>
-                Datos personales
-            </legend>
-            <label>Name</label>
-            <input type="text" v-model="name">
-            <br>
-            <label>Username</label>
-            <input type="text" v-model="username">
-            <br>
-            <label>Password</label>
-            <input type="password" v-model="password">
-            <br>
-            <label>Email</label>
-            <input type="email" v-model="email">
-            <br>
-            <label>Phone</label>
-            <input type="tel" v-model="phone">
-            <br>
-            <label>website</label>
-            <input type="text" v-model="website">
-            <br>
-            <button class="btn btn-success" @click="guardar">
-                Guardar
-            </button>
-            <button class="btn btn-warning" @click="cancelar">Cancelar</button>
+          <form v-else action="">
+            <fieldset>
+                <legend>
+                    Datos personales
+                </legend>
+                <label>Name</label>
+                <input type="text" v-model="name">
+                <br>
+                <label>Username</label>
+                <input type="text" v-model="username">
+                <br>
+                <label>Password</label>
+                <input type="password" v-model="password">
+                <br>
+                <label>Email</label>
+                <input type="email" v-model="email">
+                <br>
+                <label>Phone</label>
+                <input type="tel" v-model="phone">
+                <br>
+                <label>website</label>
+                <input type="text" v-model="website">
+                <br>
+                <button class="btn btn-success" @click="guardar">
+                    Guardar
+                </button>
+                <button class="btn btn-warning" @click="cancelar">Cancelar</button>
+            </fieldset>
         </form>
 
     </div>
@@ -90,53 +93,84 @@
                     email: '',
                     phone: '',
                     website: '',
-                    showBtn: true,
-                    showTable: true,
-                    showForm: false,
+                    mostrar: 'show',
+                    accion: '',
+                    idAux: 0,
                 }
             },
             methods: {
-                showHide() {
-                    this.showBtn = !this.showBtn;
-                    this.showTable = !this.showTable;
-                    this.showForm = !this.showForm;
+                action (m, u) {
+                    if (m == 'agregar') {
+
+                        this.mostrar = '';
+                        this.accion = 'agregar';
+                        
+                    } else if (m == 'editar') {
+                        
+                        this.mostrar = ''
+
+                        this.name = u.name;
+                        this.username = u.username;
+                        this.password = u.password;
+                        this.email = u.email;
+                        this.phone = u.phone;
+                        this.website = u.website;
+
+                        this.accion = 'editar';
+
+                        this.idAux = u.id;
+                    }
                 },
                 guardar(e){
-                    console.log(this.id);
-                    
+
                     if (this.name == '' || this.username == '' || this.password == '' || this.email == ''
                     || this.phone == '' || this.website == '') {
                         alert("Campos vacíos");
                     } else {
-                        this.id = this.id + 1;
-                        
-                        let new_usr = {
-                            id: this.id,
-                            name: this.name,
-                            username: this.username,
-                            password: this.password,
-                            email: this.email,
-                            phone: this.phone,
-                            website: this.website,
-                        };
-    
-                        this.users.push(new_usr);
+
+                        if (this.accion == 'agregar') {
+                            this.id = this.id + 1;
+
+                            let new_usr = {
+                                id: this.id,
+                                name: this.name,
+                                username: this.username,
+                                password: this.password,
+                                email: this.email,
+                                phone: this.phone,
+                                website: this.website,
+                            };
+
+                            this.users.push(new_usr);
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Usuario agregado éxitosamente.',
+                                showConfirmButton: true,
+                            });
+
+                        } else if (this.accion == 'editar') {
+
+                            this.users[this.idAux-1].name = this.name;
+                            this.users[this.idAux-1].username = this.username;
+                            this.users[this.idAux-1].password = this.password;
+                            this.users[this.idAux-1].email = this.email;
+                            this.users[this.idAux-1].phone = this.phone;
+                            this.users[this.idAux-1].website = this.website;
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Se han guardado los cambios con éxito.',
+                                showConfirmButton: true,
+                            });
+
+                        }
+
                         this.limpiarCampos();
-                        this.showHide();
+                        this.mostrar = 'show';
+                        
                     }
-
                     e.preventDefault();
-
-                },
-                cancelar(e){
-                    
-                    this.showHide();
-
-                    this.limpiarCampos();
-
-                    e.preventDefault();
-                },
-                editar() {
 
                 },
                 eliminar(i) {
@@ -152,14 +186,20 @@
                     }).then((result) => {
                         if (result.value) {
                             Swal.fire(
-                            'Eliminado!',
-                            'El usuario ah sido eliminado.',
+                                'Eliminado!',
+                                'El usuario ah sido eliminado.',
                             'success'
                             )
                             this.users.splice(i, 1);
                         }
                     })
+                    
+                },
+                cancelar(){
+                    
+                    this.mostrar = 'show';
 
+                    this.limpiarCampos();
                 },
                 limpiarCampos() {
                     this.name = '';
