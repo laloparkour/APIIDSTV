@@ -23,7 +23,7 @@
                 <img :src="`https://image.tmdb.org/t/p/w500/${m.poster_path}`" class="card-img-top">
                 <div class="card-body">
                     <p class="card-title">{{ m.title }}</p>
-                    <button class="btn btn-primary">Ver detalles</button>
+                    <button class="btn btn-primary" @click="mostrarDetalles(m.id)">Ver detalles</button>
                 </div>  
             </div>
         </div>
@@ -49,7 +49,7 @@
             },
 
             methods: {
-                async cargarPeliculas() {
+                cargarPeliculas() {
 
                     const _self = this;
 
@@ -70,14 +70,17 @@
                         console.log(error);
                     });
                 },
+                mostrarDetalles(id) {
+
+                    localStorage.setItem('movie_id', id);
+
+                    window.location.href = 'details.html';
+
+                },
             },
             mounted() {
 
                 this.cargarPeliculas();
-
-                //let peliculas = localStorage.getItem('peliculas');
-                //peliculas = JSON.parse(peliculas);
-                //console.log(peliculas);
                 
             },
         }).mount('#contenedor');
