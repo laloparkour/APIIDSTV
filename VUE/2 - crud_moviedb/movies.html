@@ -11,22 +11,22 @@
     
 </head>
 <body>
-
+    
     <div id="contenedor" class="container-fluid">
         <nav class="navbar navbar-dark bg-dark">
             <div class="container">
               <a class="navbar-brand" href="#">
-                Lo más popular
-              </a>
+                    Lo más popular
+                </a>
             </div>
         </nav>
 
         <div class="row">
             <div class="col-3" v-for="m in movies">
-                <div class="card" style="   ">
-                    <img :src="`https://image.tmdb.org/t/p/w500/${m.poster_path}`" class="card-img-top">
+                <div class="card mt-2">
+                    <img :src="`https://image.tmdb.org/t/p/w500/${m.poster_path}`" height="200" width="100" class="card-img-top">
                     <div class="card-body">
-                        <p class="card-title">{{ m.title }}</p>
+                        <p class="card-title fs-5 fw-semibold">{{ m.title }}</p>
                         <button class="btn btn-primary" @click="mostrarDetalles(m.id)">Ver detalles</button>
                     </div>  
                 </div>
