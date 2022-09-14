@@ -46,37 +46,6 @@
             methods: {
                 login(e) {
 
-/*                     var tmp_mail = this.email;
-                    var tmp_pwd = this.password;
-
-                    let acces = this.users.map(function(u) {
-                        if (tmp_mail === u.email) {
-                            if (tmp_pwd === u.password) {
-
-                                let tmp_usr = {
-                                    id: u.id,
-                                    name: u.name,
-                                    username: u.username,
-                                    email: u.email,
-                                    phone: u.phone,
-                                    website: u.website,
-                                };
-                                
-                                alert("Correctos");
-
-                                localStorage.setItem('user', JSON.stringify(tmp_usr));
-                                
-                                window.location.href = 'users.html';
-                                 
-                            }
-                        }
-                    })
-
-                    alert("Datos incorrectos"); */
-
-
-                    //var axios = require('axios');
-                    //var FormData = require('form-data');
                     var data = new FormData();
                     data.append('username', this.email);
                     data.append('password', this.password);
@@ -87,7 +56,6 @@
                     url: 'https://api.themoviedb.org/3/authentication/token/validate_with_login',
                     headers: { 
                         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMjU5MTAxNzQwYzM4Njk3NzNiYjBiN2UzODlmMjU1MCIsInN1YiI6IjYxOGU5Y2I5MjBlNmE1MDAyYzUwNWUyNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wzHg_l28yVYvXQ0J8fkjGZ5Rg0jUwYp--t3fx2HqK5M', 
-                        //...data.getHeaders()
                     },
                     data : data
                     };
@@ -113,10 +81,7 @@
                 },
             },
             mounted() {
-/*                 fetch('data/users.json')
-                .then((res) => res.json())
-                .then((json) => ( this.users = json ))
-                .catch((err) => ( alert('no data') )) */
+
             },
         }).mount('#contenedor');
 

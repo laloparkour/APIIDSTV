@@ -8,16 +8,36 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <script src="https://kit.fontawesome.com/dee726f6ea.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <div id="contenedor">
         <div class="row">
-            <div class="col">
-                <h1>{{ movie.title }}({{ movie.release_date }})</h1>
-                <p>{{ movie.release_date }} *</p>
-                <p v-for="genre in movie.genres"> {{ genre.name }}</p>
+            <div class="col-12 d-flex">
+                <div class="">
+                    <img :src="`https://image.tmdb.org/t/p/w500/${movie.poster_path}`" class="rounded">
+                </div>
+                <div class="">
+                    <h1>{{ movie.title }}({{ movie.release_date }})</h1>
+                    <p>{{ movie.release_date }} *</p>
+                    <p v-for="genre in movie.genres"> {{ genre.name }}</p>
+                    <p>{{ movie.runtime }}m</p>
+    
+                    <div class="valorar">
+                        <ul v-for="n in numeros" class="list-group">
+                            <li><button @click="valorar(n)" class="btn"><i class="fa-regular fa-star"></i></button></li>
+                        </ul>
+                        <!-- <button @click="valorar(n)">¡Valórala!</button> -->
+                        <button @click="desvalorar(n)">Desvalorar</button>
+                    </div>
+    
+                    <p>{{ movie.tagline}}</p>
+                    <h3>
+                        Vista general
+                    </h3>
+                    <p>{{ movie.overview }}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -34,21 +54,47 @@
                 return {
                     movie_id: '',
                     movie: '',
+                    numeros: [1, 2, 3, 4, 5],
                 }
             },
 
             methods: {
- 
+                valorar(n) {
+
+                    console.log(n);
+
+                    var data = JSON.stringify({
+                        "value": n
+                    });
+
+                    var config = {
+                    method: 'post',
+                    url: 'https://api.themoviedb.org/3/movie/985939/rating',
+                    headers: { 
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMjU5MTAxNzQwYzM4Njk3NzNiYjBiN2UzODlmMjU1MCIsInN1YiI6IjYxOGU5Y2I5MjBlNmE1MDAyYzUwNWUyNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wzHg_l28yVYvXQ0J8fkjGZ5Rg0jUwYp--t3fx2HqK5M', 
+                        'Content-Type': 'application/json'
+                    },
+                    data : data
+                    };
+
+                    axios(config)
+                    .then(function (response) {
+                        console.log(JSON.stringify(response.data));
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                },
+                desvalorar() {
+
+                },
             },
             mounted() {
 
                 let movie_id = localStorage.getItem('movie_id');
 
                 this.movie_id = movie_id;
-
-                console.log(this.movie_id);
-
-                console.log("----PETICION-----")
 
                 const _self = this;
 
