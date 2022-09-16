@@ -1,0 +1,33 @@
+.setBackgroundGeneral {
+  background-color: #AC7088;
+}
+/*
+.setBackgroundGeneral(@color) {
+    background-color: @color;
+}*/
+.container {
+  display: flex;
+  justify-content: center;
+}
+.container fieldset {
+  flex-direction: column;
+  background-color: #D2DAFF;
+  border-radius: 5%;
+}
+.container fieldset form {
+  background-color: #AC7088;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.container fieldset form div {
+  display: flex;
+  flex-direction: column;
+}
+.container fieldset form button {
+  background-color: #3120E0;
+  color: white;
+  border: none;
+  border-radius: 5%;
+  height: 20px;
+}
