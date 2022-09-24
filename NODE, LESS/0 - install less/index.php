@@ -11,6 +11,9 @@
     
     <div class="container">
 
+        <p>Ola</p>
+
+
         <fieldset>            
             <legend>Acceso al panel</legend>
             <form action="">                
@@ -31,6 +34,28 @@
         </fieldset>
     </div>
 
+    {{ templateSaludo }}
 
+
+    <script>
+export default {
+  data() {
+    return {
+      greeting: 'ola'
+    }
+  }
+}
+</script>
+
+<templateSaludo>
+  <p class="greeting">{{ greeting }}</p>
+</templateSaludo>
+
+<style>
+.greeting {
+  color: red;
+  font-weight: bold;
+}
+</style>
 </body>
 </html>
