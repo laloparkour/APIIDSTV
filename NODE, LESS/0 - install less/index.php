@@ -16,19 +16,21 @@
 
         <fieldset>            
             <legend>Acceso al panel</legend>
-            <form action="">                
+            <form action="app/AuthController.php" method="POST">                
 
                 <div class="">
                     <label for="">Email</label>
-                    <input type="Email">
+                    <input type="Email" name="email" required>
                 </div>
 
                 <div class="">
                     <label for="">Contraseña</label>
-                    <input type="password">
+                    <input type="password" name="password" required>
                 </div>
+
+               <input type="hidden" name="action" value="access">
     
-                <button type="submit">Acceder</button>
+              <button type="submit">Acceder</button>
                 
             </form>    
         </fieldset>

@@ -1,3 +1,12 @@
+<?php
+
+	include("../app/ProductsController.php");
+
+	$productController = new ProductsController();
+	$productController->getProducts();
+
+?>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -34,7 +43,8 @@
 					</section> 
 					<section>
 						<div class="row">
-							<?php for ($i=0; $i < 12; $i++): ?>
+							<?php  if (isset($products) && count($products)) : ?>
+								<?php  foreach($products as $product): ?>
 								<div class="col-md-4 col-sm-12"> 
 									<div class="card mb-2">
 										<img src="../public/img/logo.png" class="card-img-top" alt="...">
@@ -57,7 +67,8 @@
 										</div>
 									</div>  
 								</div>
-							<?php endfor; ?>
+								<?php  endforeach; ?>
+							<?php endif; ?>
 						</div>
 					</section> 
 				</div>
