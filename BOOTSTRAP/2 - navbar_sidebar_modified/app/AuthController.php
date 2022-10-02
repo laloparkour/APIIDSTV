@@ -50,9 +50,10 @@
 
                 header("Location:../products/index.php?success");
             } else {
-                echo "no hola";
                 header("Location:../?error");
             }
 
         }
+
+
     }
