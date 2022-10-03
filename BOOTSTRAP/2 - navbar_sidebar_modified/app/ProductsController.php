@@ -1,8 +1,11 @@
 <?php
 
+    $_SESSION['message'] = '';
+
     session_start();
 
     if (isset($_POST["action"])) {
+
         switch($_POST['action']) {
             case 'store':
 
@@ -10,11 +13,31 @@
                 $description = strip_tags($_POST['description']);
                 $features = strip_tags($_POST['features']);
 
+                $target_path = "../public/img/";
+                $target_path = $target_path . basename($_FILES['foto']['name']);
+                if(move_uploaded_file($_FILES['foto']['tmp_name'], $target_path)) {
+                    echo "El archivo ".  basename($_FILES['foto']['name']). 
+                    " ha sido subido";
+                } else{
+                    echo "Ha ocurrido un error, trate de nuevo!";
+                }
+
                 $productController = new ProductsController();
-                $productController->store($name, $description, $features);
+
+                $slug = preg_replace('/[^A-Za-z0-9-]+/','-',$name);
+                $slug = strtolower($slug);
+
+                if($productController->checkProduct($slug)) {
+                    echo "El producto ya existe";
+                    header("Location:../products/index.php?".$response->message);
+                } else {
+                    $productController->store($name, $target_path, $slug, $description, $features);
+                }
+
 
             break;
         }
+
     }
 
     Class ProductsController {
@@ -38,11 +61,8 @@
             ));
             
             $response = curl_exec($curl);
-            
             curl_close($curl);
-        
             $response = json_decode($response);
-
 
             if (isset($response->code) && $response->code > 0) {
                 return $response->data;
@@ -52,10 +72,7 @@
 
         }
 
-        public function store($name, $description, $features) {
-
-            $slug = preg_replace('/[^A-Za-z0-9-]+/','-',$name);
-            $slug = strtolower($slug);
+        public function store($name, $nombreImagen, $slug, $description, $features) {
 
             $curl = curl_init();
 
@@ -74,14 +91,14 @@
                     'description' => $description,
                     'features' => $features,
                     'brand_id' => '1',
-                ),
+                    'cover'=> new CURLFILE($nombreImagen,
+                )),
                 CURLOPT_HTTPHEADER => array(
                     'Authorization: Bearer ' . $_SESSION['token']
                 ),
             ));
 
             $response = curl_exec($curl);
-
             curl_close($curl);
             $response = json_decode($response);
 
@@ -92,6 +109,40 @@
             }
 
         }
+
+        public function checkProduct($slug) {
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/slug/'.$slug,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer 105|4CVuNlwkLUvByq1Gas0NVxOHkdWqTgwq4dRXZE3Z'
+            ),
+            ));
+
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $response = json_decode($response);
+
+            if (isset($response->code) && $response->code > 0) {
+                $_SESSION['message'] = 'Este producto ya existe.';
+                return true;
+            } else {
+                $_SESSION['message'] = '';
+                return false;
+            }
+
+        }
+
+        
 
 
     }

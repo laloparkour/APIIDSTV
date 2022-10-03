@@ -6,6 +6,8 @@
 
 	$products = $productController->getProducts();
 
+	$message = $_SESSION['message'];
+
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +16,8 @@
 		<?php include('../layouts/head.template.php')?>
 	</head>
 	<body>
+
+		<?php echo $message; ?>
 
 		<?php include('../layouts/navbar.template.php')?>
 
@@ -86,23 +90,28 @@
 						<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<form action="../app/ProductsController.php" method="POST">
+					<form enctype="multipart/form-data" action="../app/ProductsController.php" method="POST">
 
 						<div class="modal-body">
 
 							<div class="mb-3">
 								<label for="name" class="form-label">Product name:</label>
-								<input type="text" name="name" class="form-control" id="name">
+								<input type="text" name="name" class="form-control" id="name" required>
 							</div>
 
 							<div class="mb-3">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="3" name="description"></textarea>
+								<textarea class="form-control" rows="3" name="description" required></textarea>
 							</div>
 							
 							<div class="mb-3">
 								<label class="form-label">Features</label>
-								<textarea class="form-control" rows="3" name="features"></textarea>
+								<textarea class="form-control" rows="3" name="features" required></textarea>
+							</div>
+
+							<div class="mb-3">
+								<label for="formFile" class="form-label">Select image</label>
+								<input class="form-control" name="foto" type="file" id="formFile" accept="image/*" required>
 							</div>
 
 							<input type="hidden" name="action" value="store">
