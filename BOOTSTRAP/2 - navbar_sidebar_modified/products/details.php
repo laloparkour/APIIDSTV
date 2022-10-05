@@ -68,15 +68,17 @@
                                     <h5>Categoría</h5>
                                     <?php if (isset($product->categories) && count($product->categories) > 0) : ?>
 								        <?php  foreach($product->categories as $c): ?>
-                                            <p><?= $c->name; ?></p>
+                                            <ul class="list-group">
+                                                <li class="list-group-item"><?= $c->name; ?></li>
+                                            </ul>
                                         <?php  endforeach; ?>
 							        <?php endif; ?>
 
                                     <h5>Etiquetas</h5>
                                     <?php if (isset($product->tags) && count($product->tags) > 0) : ?>
 								        <?php  foreach($product->tags as $t): ?>
-                                            <ul>
-                                                <li><?= $t->name; ?></li>
+                                            <ul class="list-group">
+                                                <li class="list-group-item"><?= $t->name; ?></li>
                                             </ul>
                                         <?php  endforeach; ?>
 							        <?php endif; ?>
