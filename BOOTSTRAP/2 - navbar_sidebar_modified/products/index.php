@@ -1,10 +1,13 @@
 <?php
 
 	include("../app/ProductsController.php");
+	include("../app/BrandsController.php");
 
 	$productController = new ProductsController();
-
+	$BrandsController = new BrandsController();
+	
 	$products = $productController->getProducts();
+	$brands = $BrandsController->getBrands();
 
 ?>
 
@@ -58,7 +61,7 @@
 												<a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
 													Editar
 												</a>
-												<a onclick="eliminar()" href="#" class="btn btn-danger mb-1 col-6">
+												<a onclick="eliminar(<?= $product->id ?>)" href="#" class="btn btn-danger mb-1 col-6">
 													Eliminar
 												</a>
 												<a href="details.php?slug=<?=$product->slug;?>" class="btn btn-info col-12">
@@ -103,6 +106,14 @@
 							<div class="mb-3">
 								<label class="form-label">Features</label>
 								<textarea class="form-control" rows="3" name="features" required></textarea>
+							</div>
+
+							<div class="mb-3">
+								<select name="brand_id" required class="form-control">
+									<?php foreach ($brands as $brand): ?>
+										<option value="<?= $brand->id ?>"><?=$brand->name?></option>
+									<?PHP endforeach; ?>
+								</select>
 							</div>
 
 							<div class="mb-3">
