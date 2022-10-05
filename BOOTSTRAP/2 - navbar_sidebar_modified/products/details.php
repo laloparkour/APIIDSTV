@@ -65,9 +65,21 @@
                                     <h5>Marca</h5>
                                     <p><?= $product->brand->name ?></p>
 
-
-                                    <?php  foreach($products as $product): ?>
+                                    <h5>Categoría</h5>
+                                    <?php if (isset($product->categories) && count($product->categories) > 0) : ?>
+								        <?php  foreach($product->categories as $c): ?>
+                                            <p><?= $c->name; ?></p>
                                         <?php  endforeach; ?>
+							        <?php endif; ?>
+
+                                    <h5>Etiquetas</h5>
+                                    <?php if (isset($product->tags) && count($product->tags) > 0) : ?>
+								        <?php  foreach($product->tags as $t): ?>
+                                            <ul>
+                                                <li><?= $t->name; ?></li>
+                                            </ul>
+                                        <?php  endforeach; ?>
+							        <?php endif; ?>
 
                                 </div>  
 							</div>
