@@ -36,7 +36,13 @@
                 }
 
 
-            break;
+                break;
+            case 'remove':
+
+                $productController = new ProductsController();
+                $productController->remove();
+
+                break;
         }
 
     }
@@ -139,6 +145,15 @@
                 return array();
             }
 
+        }
+
+        public function remove() {
+            $id = $_POST['id'];    
+            $action = $_POST['action'];
+            
+            echo $id;
+            echo $action;
+            exit;
         }
 
         

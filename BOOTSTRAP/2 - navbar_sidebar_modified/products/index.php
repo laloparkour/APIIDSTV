@@ -140,26 +140,42 @@
 
 		<!-- Scripts -->
 		<?php include('../layouts/scripts.template.php')?>
-		<script type="text/javascript">
-			function eliminar() {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire(
-                        'Deleted!',
-                        'Your file has been deleted.',
-                        'success'
-                        )
-                    }
-                })
-            }
+  		<script>
+			function eliminar(id) {
+				
+				console.log("eliminar")
+				
+				swal({
+				  title: "Are you sure?",
+				  text: "Once deleted, you will not be able to recover this imaginary file!",
+				  icon: "warning",
+				  buttons: true,
+				  dangerMode: true,
+				})
+				.then((willDelete) => {
+				  if (willDelete) {
+
+					var bodyFormData = new FormData();
+					bodyFormData.append('id', id);
+					bodyFormData.append('action', 'delete'); 
+
+					axios.post('../app/ProductsController.php', bodyFormData)
+					.then(function (response) {
+						console.log(response);
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+
+
+				    swal("Poof! Your imaginary file has been deleted!", {
+				      icon: "success",
+				    });
+				  } else {
+				    swal("Your imaginary file is safe!");
+				  }
+				});
+			}
 		</script>
 	</body>
 </html>
