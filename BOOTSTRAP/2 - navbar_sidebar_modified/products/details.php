@@ -1,3 +1,15 @@
+<?php
+
+
+    include("../app/ProductsController.php");
+    
+    $slug = $_GET['slug'];
+    
+    $productController = new ProductsController();
+    
+    $product = $productController->checkProduct($slug);
+?>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -30,24 +42,35 @@
 
 					<section>
 						<div class="row">
-                            <div class="col-md-4 col-sm-12"> 
+                            <div class="col-md-6 col-sm-12"> 
                                 <div class="card mb-2">
-                                  <img src="../public/img/logo.png" class="card-img-top" alt="...">
-                                  <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <div class="row">
-                                        <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
-                                            Editar
-                                        </a>
-                                        <a onclick="eliminar()" href="#" class="btn btn-danger mb-1 col-6">
-                                            Eliminar
-                                        </a>
+                                    <img src="<?= $product->cover; ?>" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= $product->name ?></h5>
+                                        <p class="card-text"><?= $product->description; ?></p>
+
+                                        <div class="row">
+                                            <a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+                                                Editar
+                                            </a>
+                                            <a onclick="eliminar()" href="#" class="btn btn-danger mb-1 col-6">
+                                                Eliminar
+                                            </a>
+                                            <a href="details.php?slug=<?=$product->slug;?>" class="btn btn-info col-12">
+                                                Detalles
+                                            </a>
+                                        </div>
                                     </div>
-                                  </div>
+
+                                    <h5>Marca</h5>
+                                    <p><?= $product->brand->name ?></p>
+
+
+                                    <?php  foreach($products as $product): ?>
+                                        <?php  endforeach; ?>
+
                                 </div>  
-                            </div>
+							</div>
 						</div>
 					</section> 
 					 

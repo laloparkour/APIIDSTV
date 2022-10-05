@@ -6,8 +6,6 @@
 
 	$products = $productController->getProducts();
 
-	$message = $_SESSION['message'];
-
 ?>
 
 <!DOCTYPE html>
@@ -16,8 +14,6 @@
 		<?php include('../layouts/head.template.php')?>
 	</head>
 	<body>
-
-		<?php echo $message; ?>
 
 		<?php include('../layouts/navbar.template.php')?>
 
@@ -40,7 +36,7 @@
 										<li class="breadcrumb-item active" aria-current="page">Products</li>
 									</ol>
 									<div class="col float-end">
-										<button  data-bs-toggle="modal" data-bs-target="#addProductModal">Añadir botón</button>
+										<button  data-bs-toggle="modal" data-bs-target="#addProductModal">Añadir producto</button>
 									</div>
 								</nav>                            
 							</div>
@@ -65,7 +61,7 @@
 												<a onclick="eliminar()" href="#" class="btn btn-danger mb-1 col-6">
 													Eliminar
 												</a>
-												<a href="details.php" class="btn btn-info col-12">
+												<a href="details.php?slug=<?=$product->slug;?>" class="btn btn-info col-12">
 													Detalles
 												</a>
 											</div>

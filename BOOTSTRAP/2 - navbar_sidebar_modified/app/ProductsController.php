@@ -1,7 +1,5 @@
 <?php
 
-    $_SESSION['message'] = '';
-
     session_start();
 
     if (isset($_POST["action"])) {
@@ -24,12 +22,15 @@
 
                 $productController = new ProductsController();
 
-                $slug = preg_replace('/[^A-Za-z0-9-]+/','-',$name);
+                $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $name);
                 $slug = strtolower($slug);
 
                 if($productController->checkProduct($slug)) {
                     echo "El producto ya existe";
+
+                    exit;
                     header("Location:../products/index.php?".$response->message);
+
                 } else {
                     $productController->store($name, $target_path, $slug, $description, $features);
                 }
@@ -124,7 +125,7 @@
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer 105|4CVuNlwkLUvByq1Gas0NVxOHkdWqTgwq4dRXZE3Z'
+                'Authorization: Bearer ' . $_SESSION['token']
             ),
             ));
 
@@ -133,11 +134,9 @@
             $response = json_decode($response);
 
             if (isset($response->code) && $response->code > 0) {
-                $_SESSION['message'] = 'Este producto ya existe.';
-                return true;
+                return $response->data;
             } else {
-                $_SESSION['message'] = '';
-                return false;
+                return array();
             }
 
         }
