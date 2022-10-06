@@ -161,10 +161,10 @@
 
 					axios.post('../app/ProductsController.php', bodyFormData)
 					.then(function (response) {
-						console.log(response);
+						console.log(response.data)
 					})
 					.catch(function (error) {
-						console.log(error);
+						console.log(error)
 					});
 
 

@@ -10,6 +10,7 @@
                 $name = strip_tags($_POST['name']);
                 $description = strip_tags($_POST['description']);
                 $features = strip_tags($_POST['features']);
+                $brand_id = strip_tags($_POST['brand_id']);
 
                 $target_path = "../public/img/";
                 $target_path = $target_path . basename($_FILES['foto']['name']);
@@ -32,12 +33,12 @@
                     header("Location:../products/index.php?".$response->message);
 
                 } else {
-                    $productController->store($name, $target_path, $slug, $description, $features);
+                    $productController->store($name, $target_path, $slug, $brand_id, $description, $features);
                 }
 
 
                 break;
-            case 'remove':
+            case 'delete':
 
                 $productController = new ProductsController();
                 $productController->remove();
@@ -79,7 +80,7 @@
 
         }
 
-        public function store($name, $nombreImagen, $slug, $description, $features) {
+        public function store($name, $nombreImagen, $slug, $brand_id, $description, $features) {
 
             $curl = curl_init();
 
@@ -97,7 +98,7 @@
                     'slug' => $slug,
                     'description' => $description,
                     'features' => $features,
-                    'brand_id' => '1',
+                    'brand_id' => $brand_id,
                     'cover'=> new CURLFILE($nombreImagen,
                 )),
                 CURLOPT_HTTPHEADER => array(
@@ -148,12 +149,37 @@
         }
 
         public function remove() {
-            $id = $_POST['id'];    
-            $action = $_POST['action'];
+            $id = strip_tags($_POST['id']);    
+            $action = strip_tags($_POST['action']);
             
-            echo $id;
-            echo $action;
-            exit;
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/'.$id,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'DELETE',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $_SESSION['token']
+            ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            echo $response;
+            $response = json_decode($response);
+            
+            if (isset($response->code) && $response->code > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
         }
 
         
