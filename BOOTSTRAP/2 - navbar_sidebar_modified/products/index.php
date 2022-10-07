@@ -58,7 +58,7 @@
 											<p class="card-text"><?= $product->description; ?></p>
 
 											<div class="row">
-												<a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+												<a data-product='<?= json_encode($product) ?>' onclick="editProduct(this)" data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
 													Editar
 												</a>
 												<a onclick="eliminar(<?= $product->id ?>)" href="#" class="btn btn-danger mb-1 col-6">
@@ -100,18 +100,18 @@
 
 							<div class="mb-3">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="3" name="description" required></textarea>
+								<textarea class="form-control" rows="3" name="description" id="description" required></textarea>
 							</div>
 							
 							<div class="mb-3">
 								<label class="form-label">Features</label>
-								<textarea class="form-control" rows="3" name="features" required></textarea>
+								<textarea class="form-control" rows="3" name="features" id="features" required></textarea>
 							</div>
 
 							<div class="mb-3">
-								<select name="brand_id" required class="form-control">
+								<select id="brand_id" name="brand_id" required class="form-control">
 									<?php foreach ($brands as $brand): ?>
-										<option value="<?= $brand->id ?>"><?=$brand->name?></option>
+										<option value="<?= $brand->id ?>"><?= $brand->name ?></option>
 									<?PHP endforeach; ?>
 								</select>
 							</div>
@@ -121,7 +121,8 @@
 								<input class="form-control" name="foto" type="file" id="formFile" accept="image/*" required>
 							</div>
 
-							<input type="hidden" name="action" value="store">
+							<input type="hidden" name="action" id="action" value="store">
+							<input type="hidden" name="id" id="id_product">
 							<input type="hidden" name="super_token" value="<?= $_SESSION['super_token']?>">
 
 						</div>
@@ -182,28 +183,18 @@
 				});
 			}
 
-
-/* 			function editProduct(target)
-			{
+			function editProduct(target) {
 
 				let product = JSON.parse( target.dataset.product )
 
+				document.getElementById('id_product').value = product.id
 				document.getElementById('name').value = product.name
-				document.getElementById('slug').value = product.slug
 				document.getElementById('description').value = product.description
 				document.getElementById('features').value = product.features
 				document.getElementById('brand_id').value = product.brand_id
-
-				document.getElementById('id_product').value = product.id
-
-
 				document.getElementById('action').value = 'update'
 
-			} */
-
-
-
-
+			}
 
 		</script>
 	</body>
