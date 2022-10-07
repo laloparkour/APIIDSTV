@@ -4,9 +4,9 @@
 	include("../app/BrandsController.php");
 
 	$productController = new ProductsController();
-	$BrandsController = new BrandsController();
-	
 	$products = $productController->getProducts();
+
+	$BrandsController = new BrandsController();
 	$brands = $BrandsController->getBrands();
 
 ?>
@@ -159,12 +159,12 @@
 					bodyFormData.append('id', id);
 					bodyFormData.append('action', 'delete'); 
 
-					axios.post('../app/ProductsController.php', bodyFormData)
+					axios.post('../app/ProductsController.php/', bodyFormData)
 					.then(function (response) {
-						console.log(response.data)
+						console.log(response);
 					})
 					.catch(function (error) {
-						console.log(error)
+						console.log(error);
 					});
 
 
