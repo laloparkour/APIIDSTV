@@ -19,7 +19,7 @@
             <div class="col-12 d-flex flex-column">
                 <img src="public/img/logo.png" alt="" class="d-block mx-auto" width="150px" height="auto">
                 <h1 class="d-block mx-auto text-center">Login</h1>
-                <form action="app/AuthController.php" method="POST">
+                <form action="<?= BASE_PATH ?>auth" method="POST">
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>

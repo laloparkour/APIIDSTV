@@ -55,9 +55,10 @@
                 $_SESSION['role'] = $response->data->role;
                 $_SESSION['token'] = $response->data->token;
 
-                header("Location:../products/index.php?success");
+                header("Location:".BASE_PATH."products?success");
+/*                 header("Location:../products/index.php?success"); */
             } else {
-                header("Location:../?error");
+                header("Location:".BASE_PATH."?error");
             }
 
         }

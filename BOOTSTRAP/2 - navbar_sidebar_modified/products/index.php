@@ -122,6 +122,7 @@
 							</div>
 
 							<input type="hidden" name="action" value="store">
+							<input type="hidden" name="super_token" value="<?= $_SESSION['super_token']?>">
 
 						</div>
 
@@ -161,21 +162,49 @@
 
 					axios.post('../app/ProductsController.php/', bodyFormData)
 					.then(function (response) {
-						console.log(response);
+						if (response.data) {
+					    	swal("Poof! Your imaginary file has been deleted!", {
+						      icon: "success",
+						    });
+					    }else{
+					    	swal("Error", {
+						      icon: "error",
+						    });;
+					    }
 					})
 					.catch(function (error) {
 						console.log(error);
 					});
 
-
-				    swal("Poof! Your imaginary file has been deleted!", {
-				      icon: "success",
-				    });
 				  } else {
 				    swal("Your imaginary file is safe!");
 				  }
 				});
 			}
+
+
+/* 			function editProduct(target)
+			{
+
+				let product = JSON.parse( target.dataset.product )
+
+				document.getElementById('name').value = product.name
+				document.getElementById('slug').value = product.slug
+				document.getElementById('description').value = product.description
+				document.getElementById('features').value = product.features
+				document.getElementById('brand_id').value = product.brand_id
+
+				document.getElementById('id_product').value = product.id
+
+
+				document.getElementById('action').value = 'update'
+
+			} */
+
+
+
+
+
 		</script>
 	</body>
 </html>
