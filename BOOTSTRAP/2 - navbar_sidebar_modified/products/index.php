@@ -64,6 +64,7 @@
 												<a onclick="eliminar(<?= $product->id ?>)" href="#" class="btn btn-danger mb-1 col-6">
 													Eliminar
 												</a>
+												<input type="hidden" id="super_token" value="<?= $_SESSION['super_token']?>">
 												<a href="details.php?slug=<?=$product->slug;?>" class="btn btn-info col-12">
 													Detalles
 												</a>
@@ -145,8 +146,6 @@
   		<script>
 			function eliminar(id) {
 				
-				console.log("eliminar")
-				
 				swal({
 				  title: "Are you sure?",
 				  text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -157,12 +156,16 @@
 				.then((willDelete) => {
 				  if (willDelete) {
 
+					let super_token = document.getElementById('super_token').value;
+
 					var bodyFormData = new FormData();
 					bodyFormData.append('id', id);
-					bodyFormData.append('action', 'delete'); 
+					bodyFormData.append('action', 'delete');
+					bodyFormData.append('sprtoken', super_token);
 
 					axios.post('../app/ProductsController.php/', bodyFormData)
 					.then(function (response) {
+
 						if (response.data) {
 					    	swal("Poof! Your imaginary file has been deleted!", {
 						      icon: "success",
