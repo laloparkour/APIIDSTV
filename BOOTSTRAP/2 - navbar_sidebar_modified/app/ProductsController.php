@@ -10,7 +10,7 @@
             $_POST['sprtoken'] == $_SESSION['super_token']) {
             switch($_POST['action']) {
                 case 'store':
-    
+
                     $name = strip_tags($_POST['name']);
                     $description = strip_tags($_POST['description']);
                     $features = strip_tags($_POST['features']);
@@ -31,11 +31,7 @@
                     $slug = strtolower($slug);
     
                     if($productController->checkProduct($slug)) {
-                        echo "El producto ya existe";
-    
-                        exit;
-                        header("Location:../products/index.php?".$response->message);
-    
+                        header("Location:".BASE_PATH."products?error");
                     } else {
                         $productController->store($name, $target_path, $slug, $brand_id, $description, $features);
                     }
@@ -133,9 +129,9 @@
             $response = json_decode($response);
 
             if (isset($response->code) && $response->code > 0) {
-                header("Location:../products/index.php?".$response->message);
+                header("Location:".BASE_PATH."products?".$response->message);
             } else {
-                header("Location:../products/index.php?".$response->message);
+                header("Location:".BASE_PATH."products?".$response->message);
             }
 
         }
@@ -226,12 +222,10 @@
 			$response = json_decode($response); 
 
 			if (isset($response->code) && $response->code > 0) { 
-
-				header("Location:../products?success");
+                header("Location:".BASE_PATH."products?success");
 
 			}else{
-
-				header("Location:../products?error");
+                header("Location:".BASE_PATH."products?error");
 			}
             
 		}

@@ -1,5 +1,5 @@
 <?php
-
+	include "../app/config.php";
 	include("../app/ProductsController.php");
 	include("../app/BrandsController.php");
 
@@ -65,6 +65,9 @@
 													Eliminar
 												</a>
 												<input type="hidden" id="super_token" value="<?= $_SESSION['super_token']?>">
+												<input type="hidden" id="bp" value="<?= BASE_PATH ?>">
+
+
 												<a href="details.php?slug=<?=$product->slug;?>" class="btn btn-info col-12">
 													Detalles
 												</a>
@@ -90,7 +93,7 @@
 						<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<form enctype="multipart/form-data" action="../app/ProductsController.php" method="POST">
+					<form enctype="multipart/form-data" action="<?= BASE_PATH ?>productos" method="POST">
 
 						<div class="modal-body">
 
@@ -144,8 +147,7 @@
 		<!-- Scripts -->
 		<?php include('../layouts/scripts.template.php')?>
   		<script>
-			function eliminar(id) {
-				
+			function eliminar(id) {		
 				swal({
 				  title: "Are you sure?",
 				  text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -157,13 +159,14 @@
 				  if (willDelete) {
 
 					let super_token = document.getElementById('super_token').value;
+					let base_path = document.getElementById('bp').value;
 
 					var bodyFormData = new FormData();
 					bodyFormData.append('id', id);
 					bodyFormData.append('action', 'delete');
 					bodyFormData.append('sprtoken', super_token);
 
-					axios.post('../app/ProductsController.php/', bodyFormData)
+					axios.post(base_path+'productos', bodyFormData)
 					.then(function (response) {
 
 						if (response.data) {
