@@ -1,5 +1,5 @@
 <?php
-
+	include "../app/config.php";
 	include("../app/ProductsController.php");
 	include("../app/BrandsController.php");
 
@@ -58,12 +58,16 @@
 											<p class="card-text"><?= $product->description; ?></p>
 
 											<div class="row">
-												<a data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
+												<a data-product='<?= json_encode($product) ?>' onclick="editProduct(this)" data-bs-toggle="modal" data-bs-target="#addProductModal" href="#" class="btn btn-warning mb-1 col-6">
 													Editar
 												</a>
 												<a onclick="eliminar(<?= $product->id ?>)" href="#" class="btn btn-danger mb-1 col-6">
 													Eliminar
 												</a>
+												<input type="hidden" id="super_token" value="<?= $_SESSION['super_token']?>">
+												<input type="hidden" id="bp" value="<?= BASE_PATH ?>">
+
+
 												<a href="details.php?slug=<?=$product->slug;?>" class="btn btn-info col-12">
 													Detalles
 												</a>
@@ -89,7 +93,7 @@
 						<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<form enctype="multipart/form-data" action="../app/ProductsController.php" method="POST">
+					<form enctype="multipart/form-data" action="<?= BASE_PATH ?>productos" method="POST">
 
 						<div class="modal-body">
 
@@ -100,18 +104,18 @@
 
 							<div class="mb-3">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="3" name="description" required></textarea>
+								<textarea class="form-control" rows="3" name="description" id="description" required></textarea>
 							</div>
 							
 							<div class="mb-3">
 								<label class="form-label">Features</label>
-								<textarea class="form-control" rows="3" name="features" required></textarea>
+								<textarea class="form-control" rows="3" name="features" id="features" required></textarea>
 							</div>
 
 							<div class="mb-3">
-								<select name="brand_id" required class="form-control">
+								<select id="brand_id" name="brand_id" required class="form-control">
 									<?php foreach ($brands as $brand): ?>
-										<option value="<?= $brand->id ?>"><?=$brand->name?></option>
+										<option value="<?= $brand->id ?>"><?= $brand->name ?></option>
 									<?PHP endforeach; ?>
 								</select>
 							</div>
@@ -121,7 +125,8 @@
 								<input class="form-control" name="foto" type="file" id="formFile" accept="image/*" required>
 							</div>
 
-							<input type="hidden" name="action" value="store">
+							<input type="hidden" name="action" id="action" value="store">
+							<input type="hidden" name="id" id="id_product">
 							<input type="hidden" name="super_token" value="<?= $_SESSION['super_token']?>">
 
 						</div>
@@ -142,10 +147,7 @@
 		<!-- Scripts -->
 		<?php include('../layouts/scripts.template.php')?>
   		<script>
-			function eliminar(id) {
-				
-				console.log("eliminar")
-				
+			function eliminar(id) {		
 				swal({
 				  title: "Are you sure?",
 				  text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -156,12 +158,17 @@
 				.then((willDelete) => {
 				  if (willDelete) {
 
+					let super_token = document.getElementById('super_token').value;
+					let base_path = document.getElementById('bp').value;
+
 					var bodyFormData = new FormData();
 					bodyFormData.append('id', id);
-					bodyFormData.append('action', 'delete'); 
+					bodyFormData.append('action', 'delete');
+					bodyFormData.append('sprtoken', super_token);
 
-					axios.post('../app/ProductsController.php/', bodyFormData)
+					axios.post(base_path+'productos', bodyFormData)
 					.then(function (response) {
+
 						if (response.data) {
 					    	swal("Poof! Your imaginary file has been deleted!", {
 						      icon: "success",
@@ -182,28 +189,18 @@
 				});
 			}
 
-
-/* 			function editProduct(target)
-			{
+			function editProduct(target) {
 
 				let product = JSON.parse( target.dataset.product )
 
+				document.getElementById('id_product').value = product.id
 				document.getElementById('name').value = product.name
-				document.getElementById('slug').value = product.slug
 				document.getElementById('description').value = product.description
 				document.getElementById('features').value = product.features
 				document.getElementById('brand_id').value = product.brand_id
-
-				document.getElementById('id_product').value = product.id
-
-
 				document.getElementById('action').value = 'update'
 
-			} */
-
-
-
-
+			}
 
 		</script>
 	</body>

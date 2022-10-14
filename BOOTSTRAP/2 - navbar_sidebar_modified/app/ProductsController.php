@@ -4,46 +4,64 @@
 
     if (isset($_POST["action"])) {
 
-        switch($_POST['action']) {
-            case 'store':
+        if (isset($_POST['super_token']) ||
+            isset($_POST['sprtoken']) && 
+            $_POST['super_token'] == $_SESSION['super_token'] || 
+            $_POST['sprtoken'] == $_SESSION['super_token']) {
+            switch($_POST['action']) {
+                case 'store':
 
-                $name = strip_tags($_POST['name']);
-                $description = strip_tags($_POST['description']);
-                $features = strip_tags($_POST['features']);
-                $brand_id = strip_tags($_POST['brand_id']);
-
-                $target_path = "../public/img/";
-                $target_path = $target_path . basename($_FILES['foto']['name']);
-                if(move_uploaded_file($_FILES['foto']['tmp_name'], $target_path)) {
-                    echo "El archivo ".  basename($_FILES['foto']['name']). 
-                    " ha sido subido";
-                } else{
-                    echo "Ha ocurrido un error, trate de nuevo!";
-                }
-
-                $productController = new ProductsController();
-
-                $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $name);
-                $slug = strtolower($slug);
-
-                if($productController->checkProduct($slug)) {
-                    echo "El producto ya existe";
-
-                    exit;
-                    header("Location:../products/index.php?".$response->message);
-
-                } else {
-                    $productController->store($name, $target_path, $slug, $brand_id, $description, $features);
-                }
-
-
+                    $name = strip_tags($_POST['name']);
+                    $description = strip_tags($_POST['description']);
+                    $features = strip_tags($_POST['features']);
+                    $brand_id = strip_tags($_POST['brand_id']);
+    
+                    $target_path = "../public/img/";
+                    $target_path = $target_path . basename($_FILES['foto']['name']);
+                    if(move_uploaded_file($_FILES['foto']['tmp_name'], $target_path)) {
+                        echo "El archivo ".  basename($_FILES['foto']['name']). 
+                        " ha sido subido";
+                    } else{
+                        echo "Ha ocurrido un error, trate de nuevo!";
+                    }
+    
+                    $productController = new ProductsController();
+    
+                    $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $name);
+                    $slug = strtolower($slug);
+    
+                    if($productController->checkProduct($slug)) {
+                        header("Location:".BASE_PATH."products?error");
+                    } else {
+                        $productController->store($name, $target_path, $slug, $brand_id, $description, $features);
+                    }
+    
                 break;
-            case 'delete':
-                $id = strip_tags($_POST['id']);
-                $productController = new ProductsController();
-                echo json_encode( $productController->remove($id) );
+                case 'update':
+    
+                    $name = strip_tags($_POST['name']);
+                    $slug = strip_tags($_POST['slug']);
+                    $description = strip_tags($_POST['description']);
+                    $features = strip_tags($_POST['features']);
+                    $brand_id = strip_tags($_POST['brand_id']); 
+                    $id = strip_tags($_POST['id']);
 
+                    $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $name);
+                    $slug = strtolower($slug);
+    
+                    $productsController = new ProductsController();
+                    $productsController->updateProduct($name, $slug, $description, $features, $brand_id, $id);
+    
                 break;
+                case 'delete':
+    
+                    $id = strip_tags($_POST['id']);
+
+                    $productsController = new ProductsController();
+                    $productsController->remove($id);
+    
+                break;
+            }
         }
 
     }
@@ -111,9 +129,9 @@
             $response = json_decode($response);
 
             if (isset($response->code) && $response->code > 0) {
-                header("Location:../products/index.php?".$response->message);
+                header("Location:".BASE_PATH."products?".$response->message);
             } else {
-                header("Location:../products/index.php?".$response->message);
+                header("Location:".BASE_PATH."products?".$response->message);
             }
 
         }
@@ -149,9 +167,6 @@
         }
 
         public function remove($id) {
-            $id = strip_tags($_POST['id']);    
-            $action = strip_tags($_POST['action']);
-            
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
@@ -172,6 +187,7 @@
 
             curl_close($curl);
             echo $response;
+
             $response = json_decode($response);
             
             if (isset($response->code) && $response->code > 0) {
@@ -182,7 +198,7 @@
 
         }
 
-        public function updateProduct($name,$slug,$description,$features,$brand_id,$id) {
+        public function updateProduct($name, $slug, $description, $features, $brand_id, $id) {
 			$curl = curl_init(); 
 
 			curl_setopt_array($curl, array(
@@ -206,22 +222,15 @@
 			$response = json_decode($response); 
 
 			if (isset($response->code) && $response->code > 0) { 
-
-				header("Location:../products?success");
+                header("Location:".BASE_PATH."products?success");
 
 			}else{
-
-				header("Location:../products?error");
+                header("Location:".BASE_PATH."products?error");
 			}
+            
 		}
-
-
-        
-
-
-        
-
 
     }
 
 ?>
+
