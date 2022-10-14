@@ -26,7 +26,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="password">
+                        <input type="password" name="password" class="form-control" id="password" required>
                     </div>
 
                     <input type="hidden" name="action" value="access">
@@ -38,5 +38,7 @@
             </div>
         </div>
     </div>
+    <script>
+    </script>
 </body>
 </html>
