@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/saludo', function () {
+Route::get('users/', [ UserController::class, 'index']);
+Route::get('users/create', [ UserController::class, 'create']);
+Route::get('users/{id}', [ UserController::class, 'show']);
+
+Route::post('users/', [ UserController::class, 'store']);
+
+/* Route::get('/saludo', function () {
     return "Hola mundo ";
 });
 
@@ -33,4 +40,4 @@ Route::get('/suma/{num1}/{num2}', function ($num1, $num2) {
 
 Route::get('multiplicacion/{num1}/{num2}/{num3?}', function ($num1, $num2, $num3 = 1) {
     return $num1 * $num2 * $num3;
-});
+}); */
