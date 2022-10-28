@@ -13,8 +13,14 @@
         <label for="name">Nombre</label>
         <input type="text" id="name" name="name">
 
+        <label for="lastname">Apellido</label>
+        <input type="text" id="lastname" name="lastname">
+        
         <label for="email">Correo</label>
         <input type="email" id="email" name="email">
+        
+        <label for="phone_number">Teléfono</label>
+        <input type="tel" id="phone_number" name="phone_number">
 
         <button type="submit">Enviar</button>
     </form>
