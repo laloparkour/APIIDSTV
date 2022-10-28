@@ -12,15 +12,19 @@
         @csrf
         <label for="name">Nombre</label>
         <input type="text" id="name" name="name">
+        <br>
 
         <label for="lastname">Apellido</label>
         <input type="text" id="lastname" name="lastname">
-        
+        <br>
+
         <label for="email">Correo</label>
         <input type="email" id="email" name="email">
-        
-        <label for="phone_number">Teléfono</label>
-        <input type="tel" id="phone_number" name="phone_number">
+        <br>
+
+        <label for="passsword">password</label>
+        <input type="tel" id="password" name="password">
+        <br>
 
         <button type="submit">Enviar</button>
     </form>

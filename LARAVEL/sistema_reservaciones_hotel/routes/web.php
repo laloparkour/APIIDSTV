@@ -21,8 +21,10 @@ Route::get('/', function () {
 Route::get('users/', [ UserController::class, 'index']);
 Route::get('users/create', [ UserController::class, 'create']);
 Route::get('users/{id}', [ UserController::class, 'show']);
-
 Route::post('users/', [ UserController::class, 'store']);
+
+
+
 
 /* Route::get('/saludo', function () {
     return "Hola mundo ";
