@@ -7,19 +7,18 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hola {{ Auth::user()->name }}</h1>
+    <h1>Usuarios</h1>
 
     
-    <form action="{{ url('logout') }}" method="POST">
-        @csrf
 
-
-        <a href="{{ url('users/') }}">Ir a usuarios</a>
-
-
-        <button type="submit">Salir</button>
-
-    </form>
+    <ol>
+        @foreach ($users as $user)
+            <li>
+                {{ $user->name }}
+                <a href="{{ url('/users', $user->id) }}">Editar</a>
+            </li>
+        @endforeach
+    </ol>
 
 </body>
 </html>

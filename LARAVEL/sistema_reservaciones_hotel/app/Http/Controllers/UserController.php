@@ -16,7 +16,8 @@ class UserController extends Controller
      // Querer consultar todos los registros
     public function index()
     {
-        return User::get();
+        $users = User::select('id', 'name')->get();
+        return view('users.index', compact('users'));
     }
 
     /**
@@ -55,8 +56,12 @@ class UserController extends Controller
     //Mostrar un objeto se muestra
     public function show($id)
     {
+
+        $user = User::find($id);
+        return view('users.update', compact('user'));
+
         //return User::where('id', $id)->get();
-        return User::find($id);
+       // return User::find($id);
     }
 
     /**
