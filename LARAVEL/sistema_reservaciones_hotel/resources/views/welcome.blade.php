@@ -9,14 +9,14 @@
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}">
 
         <!-- Bootstrap Css -->
-        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <!-- Icons Css -->
-        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/icons.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
-        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
     </head>
 
@@ -35,7 +35,7 @@
                                         </div>
                                     </div>
                                     <div class="col-5 align-self-end">
-                                        <img src="assets/images/profile-img.png" alt="" class="img-fluid">
+                                        <img src="{{ asset('images/profile-img.png') }}" alt="" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
@@ -44,7 +44,7 @@
                                     <a href="index.html" class="auth-logo-light">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
-                                                <img src="assets/images/logo-light.svg" alt="" class="rounded-circle" height="34">
+                                                <img src="{{ asset('images/logo-light.svg') }}" alt="" class="rounded-circle" height="34">
                                             </span>
                                         </div>
                                     </a>
@@ -52,7 +52,7 @@
                                     <a href="index.html" class="auth-logo-dark">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
-                                                <img src="assets/images/logo.svg" alt="" class="rounded-circle" height="34">
+                                                <img src="{{ asset('images/logo.svg') }}" alt="" class="rounded-circle" height="34">
                                             </span>
                                         </div>
                                     </a>
@@ -129,14 +129,14 @@
         <!-- end account-pages -->
 
         <!-- JAVASCRIPT -->
-        <script src="assets/libs/jquery/jquery.min.js"></script>
-        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/libs/metismenu/metisMenu.min.js"></script>
-        <script src="assets/libs/simplebar/simplebar.min.js"></script>
-        <script src="assets/libs/node-waves/waves.min.js"></script>
+        <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('libs/metismenu/metisMenu.min.js') }}"></script>
+        <script src="{{ asset('libs/simplebar/simplebar.min.js') }}"></script>
+        <script src="{{ asset('libs/node-waves/waves.min.js') }}"></script>
         
         <!-- App js -->
-        <script src="assets/js/app.js"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
     </body>
 
 </html>

@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Registro de usuario</h1>
-    <form action="{{ url('/users') }}" method="post">
+    <form action="{{ url('users') }}" method="post">
         @csrf
         @method('PUT')
 
