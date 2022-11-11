@@ -8,8 +8,10 @@
 </head>
 <body>
     <h1>Registro de usuario</h1>
-    <form action="http://127.0.0.1:8000/users/" method="post">
+    <form action="{{ url('/users') }}" method="PUT">
         @csrf
+        @method('PUT')
+
         <label for="name">Nombre</label>
         <input type="text" id="name" name="name" value="{{ $user->name }}">
         <br>
@@ -21,6 +23,8 @@
         <label for="email">Correo</label>
         <input type="email" id="email" name="email" value="{{ $user->email }}">
         <br>
+
+        <input type="hidden" name="id" value="{{ $user->id }}">
 
         <button type="submit">Guardar</button>
     </form>
